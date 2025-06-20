@@ -1,0 +1,102 @@
+<div class="container">
+  <h2>Gestion des Fiangonana</h2>
+
+  <!-- Champ de recherche -->
+  <mat-form-field appearance="fill" class="filter-field">
+    <mat-label>Rechercher</mat-label>
+    <input matInput placeholder="Filtrer par nom ou adresse" (input)="applyFilter($event.value)">
+  </mat-form-field>
+
+  <!-- Formulaire -->
+  <form [formGroup]="fiangonanaForm" (ngSubmit)="onSubmit()" class="form-container">
+    <mat-form-field appearance="fill">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="nom" required>
+      <mat-error *ngIf="fiangonanaForm.get('nom')?.hasError('required')">
+        Le nom est requis
+      </mat-error>
+      <mat-error *ngIf="fiangonanaForm.get('nom')?.hasError('maxlength')">
+        Le nom ne doit pas dépasser 255 caractères
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Adresse</mat-label>
+      <input matInput formControlName="adresse" required>
+      <mat-error *ngIf="fiangonanaForm.get('adresse')?.hasError('required')">
+        L'adresse est requise
+      </mat-error>
+      <mat-error *ngIf="fiangonanaForm.get('adresse')?.hasError('maxlength')">
+        L'adresse ne doit pas dépasser 255 caractères
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Latitude</mat-label>
+      <input matInput type="number" formControlName="latitude" step="0.0001">
+      <mat-error *ngIf="fiangonanaForm.get('latitude')?.hasError('min') || fiangonanaForm.get('latitude')?.hasError('max')">
+        La latitude doit être entre -90 et 90
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Longitude</mat-label>
+      <input matInput type="number" formControlName="longitude" step="0.0001">
+      <mat-error *ngIf="fiangonanaForm.get('longitude')?.hasError('min') || fiangonanaForm.get('longitude')?.hasError('max')">
+        La longitude doit être entre -180 et 180
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="fiangonanaForm.invalid">
+        {{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}
+      </button>
+      <button mat-raised-button color="warn" type="button" (click)="resetForm()" *ngIf="isEditMode">
+        Annuler
+      </button>
+    </div>
+  </form>
+
+  <!-- Table -->
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="nom">
+      <th mat-header-cell *matHeaderCellDef>Nom</th>
+      <td mat-cell *matCellDef="let element">{{ element.nom }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="adresse">
+      <th mat-header-cell *matHeaderCellDef>Adresse</th>
+      <td mat-cell *matCellDef="let element">{{ element.adresse }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="latitude">
+      <th mat-header-cell *matHeaderCellDef>Latitude</th>
+      <td mat-cell *matCellDef="let element">{{ element.latitude }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="longitude">
+      <th mat-header-cell *matHeaderCellDef>Longitude</th>
+      <td mat-cell *matCellDef="let element">{{ element.longitude }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="editFiangonana(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteFiangonana(element.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
