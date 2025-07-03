@@ -2,10 +2,10 @@
   <h2>Gestion des Fiangonana</h2>
 
   <!-- Champ de recherche -->
-  <mat-form-field appearance="fill" class="filter-field">
+  <!-- <mat-form-field appearance="fill" class="filter-field">
     <mat-label>Rechercher</mat-label>
-    <input matInput placeholder="Filtrer par nom ou adresse" (input)="applyFilter($event.value)">
-  </mat-form-field>
+    <input matInput placeholder="Filtrer par nom ou adresse" (input)="applyFilter($event.target.value)">
+  </mat-form-field> -->
 
   <!-- Formulaire -->
   <form [formGroup]="fiangonanaForm" (ngSubmit)="onSubmit()" class="form-container">
