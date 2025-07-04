@@ -46,7 +46,7 @@ export class ApiService {
   }
 
   patch<T>(endpoint: string, data: any): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}/${endpoint}`, data, {
+    return this.http.patch<T>(`${this.baseUrl}/${endpoint}`, data, {
       headers: { 'Content-Type': 'application/merge-patch+json' }
     }).pipe(
       catchError(this.handleError)
