@@ -16,6 +16,17 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
+        <mat-label>Code</mat-label>
+        <input matInput formControlName="code" required>
+        <mat-error *ngIf="fiangonanaForm.get('code')?.hasError('required')">
+          Le code est requis
+        </mat-error>
+        <mat-error *ngIf="fiangonanaForm.get('code')?.hasError('maxlength')">
+          Le code ne peut pas dépasser 20 caractères
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Adresse</mat-label>
         <input matInput formControlName="adresse">
         <mat-error *ngIf="fiangonanaForm.get('adresse')?.hasError('maxlength')">

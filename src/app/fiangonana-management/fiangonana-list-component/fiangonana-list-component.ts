@@ -10,6 +10,7 @@ import { ApiService } from '../../http-client/api-service';
 interface Fiangonana {
   id?: number;
   nom: string;
+  code: string;
   adresse?: string;
   latitude?: number;
   longitude?: number;

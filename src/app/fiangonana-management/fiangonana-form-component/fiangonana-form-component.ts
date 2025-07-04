@@ -11,6 +11,7 @@ import { ApiService } from '../../http-client/api-service';
 interface Fiangonana {
   id?: number;
   nom: string;
+  code: string;
   adresse?: string;
   latitude?: number;
   longitude?: number;
@@ -46,6 +47,7 @@ export class FiangonanaFormComponent implements OnInit {
   ) {
     this.fiangonanaForm = this.fb.group({
       nom: ['', [Validators.required, Validators.maxLength(50)]],
+      code: ['', [Validators.required, Validators.maxLength(20)]],
       adresse: ['', [Validators.maxLength(255)]],
       latitude: [null, [Validators.min(-90), Validators.max(90)]],
       longitude: [null, [Validators.min(-180), Validators.max(180)]]
@@ -69,6 +71,7 @@ export class FiangonanaFormComponent implements OnInit {
       next: (data) => {
         this.fiangonanaForm.patchValue({
           nom: data.nom,
+          code: data.code,
           adresse: data.adresse,
           latitude: data.latitude,
           longitude: data.longitude
@@ -87,6 +90,7 @@ export class FiangonanaFormComponent implements OnInit {
 
     const fiangonana: Fiangonana = {
       nom: this.fiangonanaForm.value.nom,
+      code: this.fiangonanaForm.value.code,
       adresse: this.fiangonanaForm.value.adresse || null,
       latitude: this.fiangonanaForm.value.latitude || null,
       longitude: this.fiangonanaForm.value.longitude || null,
