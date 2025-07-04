@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
+import { ApiService } from '../http-client/api-service';
 
 interface Offerings {
   id: number;
@@ -22,7 +22,7 @@ export class Offering implements OnInit {
   error: string | null = null;
   displayedColumns: string[] = ['type', 'quantities', 'total'];
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, private apiService: ApiService) {}
 
   ngOnInit(): void {
     console.log('Offering component initialized');
@@ -30,14 +30,9 @@ export class Offering implements OnInit {
   }
 
   fetchOfferings(): void {
-    const apiUrl = 'http://localhost:8000/api/offerings';
-    this.http
-      .get<Offerings[]>(apiUrl, {
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': 'Bearer your_token_here' // Uncomment and add token if required
-        },
-      })
+    const apiUrl = 'offerings';
+    this.apiService
+      .get<Offerings[]>(apiUrl)
       .subscribe({
         next: (data) => {
           this.offerings = data;

@@ -1,0 +1,26 @@
+mat-card {
+  margin: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.error {
+  color: red;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+button[mat-raised-button] {
+  background-color: rgb(156, 24, 196); /* vibrantPurple */
+  color: white;
+}

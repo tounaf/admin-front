@@ -1,0 +1,56 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Liste des Fiangonanas</mat-card-title>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" routerLink="/fiangonanas/create">Ajouter Fiangonana</button>
+    </mat-card-actions>
+  </mat-card-header>
+  <mat-card-content>
+    <table mat-table [dataSource]="fiangonanas" class="mat-elevation-z8">
+      <ng-container matColumnDef="nom">
+        <th mat-header-cell *matHeaderCellDef>Nom</th>
+        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.nom }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="adresse">
+        <th mat-header-cell *matHeaderCellDef>Adresse</th>
+        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.adresse || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="latitude">
+        <th mat-header-cell *matHeaderCellDef>Latitude</th>
+        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.latitude || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="longitude">
+        <th mat-header-cell *matHeaderCellDef>Longitude</th>
+        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.longitude || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Date de création</th>
+        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.createdAt | date:'short' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let fiangonana">
+          <button mat-icon-button color="primary" [routerLink]="['/fiangonanas', fiangonana.id, 'edit']">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteFiangonana(fiangonana.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <div *ngIf="error" class="error">
+      Erreur: {{ error }}
+      <button mat-button color="primary" (click)="fetchFiangonanas()">Réessayer</button>
+    </div>
+  </mat-card-content>
+</mat-card>

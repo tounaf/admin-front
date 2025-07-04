@@ -1,0 +1,45 @@
+mat-card {
+  margin: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+th.mat-header-cell {
+  background-color: rgb(156, 24, 196); /* vibrantPurple */
+  color: white;
+  font-weight: bold;
+}
+
+td.mat-cell {
+  padding: 8px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+button[mat-raised-button] {
+  background-color: rgb(156, 24, 196);
+  color: white;
+}
