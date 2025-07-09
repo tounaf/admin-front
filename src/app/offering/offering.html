@@ -39,6 +39,16 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let offering">
+          <span class="total-date">
+            {{ offering.date | date:'EEEE d MMMM yyyy' }}
+            
+          </span>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>

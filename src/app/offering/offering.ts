@@ -9,6 +9,7 @@ interface Offerings {
   type: string;
   quantities: { [key: string]: number };
   total: number;
+  date: string
 }
 
 @Component({
@@ -20,7 +21,7 @@ interface Offerings {
 export class Offering implements OnInit {
   offerings: Offerings[] = [];
   error: string | null = null;
-  displayedColumns: string[] = ['type', 'quantities', 'total'];
+  displayedColumns: string[] = ['type', 'quantities', 'total', 'date'];
 
   constructor(private cdr: ChangeDetectorRef, private apiService: ApiService) {}
 

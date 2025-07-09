@@ -4,6 +4,9 @@
   "newProjectRoot": "projects",
   "projects": {
     "admin": {
+      "i18n": {
+        "sourceLocale": "fr"
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -34,7 +37,10 @@
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
-            }
+            },
+            "polyfills": [
+              "@angular/localize/init"
+            ]
           },
           "configurations": {
             "production": {
@@ -101,6 +107,9 @@
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
+            ],
+            "polyfills": [
+              "@angular/localize/init"
             ]
           }
         }
