@@ -1,42 +1,107 @@
-mat-card {
-  margin: 20px;
-  padding: 20px;
-  background-color: #ffffff;
+$purple: #9c18c4;
+$neon-green: #00c853;
+$gray-bg: #f9f9f9;
+$table-border: #e0e0e0;
+
+.offering-card {
+  margin: 30px auto;
+  padding: 0;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 1000px; // 💡 limite la largeur
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-table {
+.header-purple {
+  background-color: $purple;
+  color: white;
+  padding: 20px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+  mat-card-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  mat-card-subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+}
+
+.custom-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
+
+  th.mat-header-cell {
+    background-color: $purple;
+    color: white;
+    text-align: left;
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  td.mat-cell {
+    padding: 10px 12px;
+    vertical-align: top;
+    border-bottom: 1px solid $table-border;
+
+    &:nth-child(3) {
+      text-align: right;
+    }
+  }
+
+  tr:nth-child(even) {
+    background-color: $gray-bg;
+  }
+
+  .total-amount {
+    font-weight: bold;
+    color: $neon-green;
+    background-color: rgba(0, 200, 83, 0.1);
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: inline-block;
+  }
 }
 
-.mat-elevation-z8 {
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
-}
-
-th.mat-header-cell {
-  background-color: rgb(156, 24, 196); /* vibrantPurple from Flutter app */
+.chip {
+  background-color: $purple;
   color: white;
-  font-weight: bold;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
 }
 
-td.mat-cell {
-  padding: 8px;
+.quantities-list {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 0;
+
+  li {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &::before {
+      content: "🪙";
+      display: inline-block;
+    }
+
+    strong {
+      font-weight: 600;
+    }
+  }
 }
 
 .error {
   color: red;
-  margin-top: 10px;
+  margin-top: 16px;
   font-size: 14px;
-}
-
-ul {
-  margin: 0;
-  padding-left: 20px;
-  list-style-type: none;
-}
-
-li {
-  margin-bottom: 4px;
 }

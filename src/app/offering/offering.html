@@ -1,28 +1,42 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Liste des Offrandes</mat-card-title>
+<mat-card class="offering-card">
+  <mat-card-header class="header-purple">
+    <mat-card-title>📋 Liste des Offrandes</mat-card-title>
+    <mat-card-subtitle *ngIf="offerings.length > 0">
+      {{ offerings.length }} enregistrement(s)
+    </mat-card-subtitle>
   </mat-card-header>
+
   <mat-card-content>
-    <table mat-table [dataSource]="offerings" class="mat-elevation-z8">
+    <table mat-table [dataSource]="offerings" class="mat-elevation-z8 custom-table">
+
+      <!-- Type Column -->
       <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>Type</th>
-        <td mat-cell *matCellDef="let offering">{{ offering.type }}</td>
+        <th mat-header-cell *matHeaderCellDef> Type </th>
+        <td mat-cell *matCellDef="let offering">
+          <span class="chip">{{ offering.type }}</span>
+        </td>
       </ng-container>
 
+      <!-- Quantities Column -->
       <ng-container matColumnDef="quantities">
-        <th mat-header-cell *matHeaderCellDef>Quantités</th>
+        <th mat-header-cell *matHeaderCellDef> Quantités </th>
         <td mat-cell *matCellDef="let offering">
-          <ul>
+          <ul class="quantities-list">
             <li *ngFor="let quantity of getQuantities(offering.quantities)">
-              {{ quantity[0] | currency:'MGA':'symbol':'1.0-0' }}: {{ quantity[1] }} unité(s)
+              <strong>{{ quantity[0] | currency:'MGA':'symbol':'1.0-0' }}</strong> : {{ quantity[1] }} unité(s)
             </li>
           </ul>
         </td>
       </ng-container>
 
+      <!-- Total Column -->
       <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef>Total</th>
-        <td mat-cell *matCellDef="let offering">{{ offering.total | currency:'MGA':'symbol':'1.0-0' }}</td>
+        <th mat-header-cell *matHeaderCellDef> Total </th>
+        <td mat-cell *matCellDef="let offering">
+          <span class="total-amount">
+            {{ offering.total | currency:'MGA':'symbol':'1.0-0' }}
+          </span>
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -30,7 +44,7 @@
     </table>
 
     <div *ngIf="error" class="error">
-      Erreur: {{ error }}
+      ❌ {{ error }}
     </div>
   </mat-card-content>
 </mat-card>
