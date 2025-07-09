@@ -3,13 +3,32 @@ $neon-green: #00c853;
 $gray-bg: #f9f9f9;
 $table-border: #e0e0e0;
 
+.search-card {
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  max-width: 1000px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.button-group {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
 .offering-card {
   margin: 30px auto;
   padding: 0;
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
-  max-width: 1000px; // 💡 limite la largeur
+  max-width: 1000px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 

@@ -1,3 +1,22 @@
+<mat-card class="search-card">
+  <mat-card-content>
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Fiangonana</mat-label>
+        <mat-select formControlName="fiangonanaIds" multiple>
+          <mat-option *ngFor="let fiangonana of fiangonanas" [value]="fiangonana.id">
+            {{ fiangonana.nom }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="button-group">
+        <button mat-raised-button color="primary" type="submit">Rechercher</button>
+        <button mat-raised-button color="warn" type="button" (click)="resetSearch()">Réinitialiser</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
 <mat-card class="offering-card">
   <mat-card-header class="header-purple">
     <mat-card-title>📋 Liste des Offrandes</mat-card-title>
@@ -8,7 +27,6 @@
 
   <mat-card-content>
     <table mat-table [dataSource]="offerings" class="mat-elevation-z8 custom-table">
-
       <!-- Type Column -->
       <ng-container matColumnDef="type">
         <th mat-header-cell *matHeaderCellDef> Type </th>
@@ -39,13 +57,21 @@
         </td>
       </ng-container>
 
+      <!-- Date Column -->
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef> Date </th>
         <td mat-cell *matCellDef="let offering">
           <span class="total-date">
             {{ offering.date | date:'EEEE d MMMM yyyy' }}
-            
           </span>
+        </td>
+      </ng-container>
+
+      <!-- Fiangonana Column -->
+      <ng-container matColumnDef="fiangonana">
+        <th mat-header-cell *matHeaderCellDef> Fiangonana </th>
+        <td mat-cell *matCellDef="let offering">
+          <span class="chip">{{ offering.fiangonana.name }}</span>
         </td>
       </ng-container>
 
