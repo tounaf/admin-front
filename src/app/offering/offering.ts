@@ -5,8 +5,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core'
+
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ApiService } from '../http-client/api-service';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 interface Offerings {
   id: number;
@@ -33,6 +39,10 @@ interface Fiangonana {
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+    // BrowserAnimationsModule
   ],
   templateUrl: './offering.html',
   styleUrl: './offering.scss',
@@ -49,10 +59,12 @@ export class Offering implements OnInit {
     private apiService: ApiService,
     private fb: FormBuilder
   ) {
-    // Initialiser le formulaire de recherche
     this.searchForm = this.fb.group({
-      fiangonanaIds: [[]], // Champ pour le select multiple
+      fiangonanaIds: [[]],
+      dateDebut: [null],
+      dateFin: [null],
     });
+
   }
 
   ngOnInit(): void {
@@ -64,7 +76,6 @@ export class Offering implements OnInit {
   fetchFiangonanas(): void {
     this.apiService.get<Fiangonana[]>('fiangonanas').subscribe({
       next: (data) => {
-        console.log(data);
         this.fiangonanas = data;
         this.cdr.detectChanges();
       },
@@ -75,12 +86,23 @@ export class Offering implements OnInit {
     });
   }
 
-  fetchOfferings(fiangonanaIds: number[] = []): void {
-    let apiUrl = 'offerings';
+  fetchOfferings(fiangonanaIds: number[] = [], dateDebut?: string, dateFin?: string): void {
+    let queryParams: string[] = [];
+
     if (fiangonanaIds.length > 0) {
-      const queryParams = fiangonanaIds.map((id) => `fiangonana[]=${id}`).join('&');
-      apiUrl = `offerings?${queryParams}`;
+      queryParams.push(...fiangonanaIds.map(id => `fiangonana[]=${id}`));
     }
+
+    if (dateDebut) {
+      queryParams.push(`date[after]=${dateDebut}`);
+    }
+
+    if (dateFin) {
+      queryParams.push(`date[before]=${dateFin}`);
+    }
+
+    const apiUrl = queryParams.length > 0 ? `offerings?${queryParams.join('&')}` : 'offerings';
+
     this.apiService.get<Offerings[]>(apiUrl).subscribe({
       next: (data) => {
         this.offerings = data;
@@ -94,17 +116,36 @@ export class Offering implements OnInit {
     });
   }
 
+
   getQuantities(quantities: { [key: string]: number }): [string, number][] {
     return Object.entries(quantities).filter(([_, count]) => count > 0);
   }
 
   onSearch(): void {
-    const fiangonanaIds = this.searchForm.get('fiangonanaIds')?.value || [];
-    this.fetchOfferings(fiangonanaIds);
+    const formValue = this.searchForm.value;
+    const fiangonanaIds = formValue.fiangonanaIds || [];
+    const dateDebut = formValue.dateDebut
+      ? this.formatDateToYMD(formValue.dateDebut)
+      : undefined;
+
+    const dateFin = formValue.dateFin
+      ? this.formatDateToYMD(formValue.dateFin)
+      : undefined;
+
+    this.fetchOfferings(fiangonanaIds, dateDebut, dateFin);
   }
+
 
   resetSearch(): void {
     this.searchForm.reset({ fiangonanaIds: [] });
     this.fetchOfferings();
   }
+
+  private formatDateToYMD(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // mois = 0-11
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
 }

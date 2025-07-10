@@ -9,6 +9,22 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Date début</mat-label>
+        <input matInput [matDatepicker]="pickerDebut" formControlName="dateDebut">
+        <mat-datepicker-toggle matSuffix [for]="pickerDebut"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDebut></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Date fin</mat-label>
+        <input matInput [matDatepicker]="pickerFin" formControlName="dateFin">
+        <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFin></mat-datepicker>
+      </mat-form-field>
+
+
       <div class="button-group">
         <button mat-raised-button color="primary" type="submit">Rechercher</button>
         <button mat-raised-button color="warn" type="button" (click)="resetSearch()">Réinitialiser</button>
@@ -71,7 +87,7 @@
       <ng-container matColumnDef="fiangonana">
         <th mat-header-cell *matHeaderCellDef> Fiangonana </th>
         <td mat-cell *matCellDef="let offering">
-          <span class="chip">{{ offering.fiangonana.name }}</span>
+          <span class="chip">{{ offering.fiangonana.nom }}</span>
         </td>
       </ng-container>
 
