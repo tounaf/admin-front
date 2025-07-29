@@ -54,14 +54,25 @@
       <!-- Quantities Column -->
       <ng-container matColumnDef="quantities">
         <th mat-header-cell *matHeaderCellDef> Quantités </th>
-        <td mat-cell *matCellDef="let offering">
-          <ul class="quantities-list">
-            <li *ngFor="let quantity of getQuantities(offering.quantities)">
-              <strong>{{ quantity[0] | currency:'MGA':'symbol':'1.0-0' }}</strong> : {{ quantity[1] }} unité(s)
-            </li>
-          </ul>
+        <td mat-cell *matCellDef="let offering; let i = index">
+          <mat-accordion class="quantities-accordion">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Détails des quantités
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <ul class="quantities-list">
+                <li *ngFor="let quantity of getQuantities(offering.quantities)">
+                  <strong>{{ quantity[0] | currency:'MGA':'symbol':'1.0-0' }}</strong> : {{ quantity[1] }} unité(s)
+                </li>
+              </ul>
+            </mat-expansion-panel>
+          </mat-accordion>
         </td>
       </ng-container>
+
 
       <!-- Total Column -->
       <ng-container matColumnDef="total">

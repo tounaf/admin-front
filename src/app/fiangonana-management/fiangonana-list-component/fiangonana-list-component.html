@@ -1,11 +1,16 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Liste des Fiangonanas</mat-card-title>
+    <mat-card-title>
+      <span>📋 Liste des Fiangonanas</span>
+      <span class="total"> Total : {{ totalItems }}</span>
+
+    </mat-card-title>
+  
+  </mat-card-header>
+  <mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" routerLink="/fiangonanas/create">Ajouter Fiangonana</button>
     </mat-card-actions>
-  </mat-card-header>
-  <mat-card-content>
     <table mat-table [dataSource]="fiangonanas" class="mat-elevation-z8">
       <ng-container matColumnDef="nom">
         <th mat-header-cell *matHeaderCellDef>Nom</th>

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://admin.fva-vitaonyasany.com/public/index.php/api'
+  apiUrl: 'https://fva-vitaonyasany.mg/admin-api/public/index.php/api'
 };

@@ -18,6 +18,11 @@ interface Fiangonana {
   updatedAt?: string;
 }
 
+interface HydraCollection<T> {
+  'member': T[];
+  'totalItems'?: number;
+}
+
 @Component({
   selector: 'app-fiangonana-list',
   standalone: true,
@@ -36,6 +41,7 @@ export class FiangonanaListComponent implements OnInit {
   fiangonanas: Fiangonana[] = [];
   error: string | null = null;
   displayedColumns: string[] = ['nom', 'adresse', 'latitude', 'longitude', 'createdAt', 'actions'];
+  totalItems: number = 0;
 
   constructor(private cdr: ChangeDetectorRef, private apiService: ApiService) {}
 
@@ -45,9 +51,10 @@ export class FiangonanaListComponent implements OnInit {
 
   fetchFiangonanas(): void {
     const apiUrl = 'fiangonanas';
-    this.apiService.get<Fiangonana[]>(apiUrl).subscribe({
-      next: (data) => {
-        this.fiangonanas = data;
+    this.apiService.get<HydraCollection<Fiangonana>>(apiUrl).subscribe({
+      next: (response) => {
+        this.fiangonanas = response['member'] || [];
+        this.totalItems = response['totalItems'] ?? this.fiangonanas.length;
         this.error = null;
         this.cdr.detectChanges();
       },

@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
 import { Dashboard } from './dashboard/dashboard';
-import { Page1 } from './page1/page1';
-import { Page2 } from './page2/page2';
 import { Offering } from './offering/offering';
 import { FiangonanaListComponent } from './fiangonana-management/fiangonana-list-component/fiangonana-list-component';
 import { FiangonanaFormComponent } from './fiangonana-management/fiangonana-form-component/fiangonana-form-component';

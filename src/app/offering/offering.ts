@@ -5,13 +5,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core'
 
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ApiService } from '../http-client/api-service';
+import { HydraCollection } from '../type/hydra-collection';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 interface Offerings {
@@ -42,6 +43,7 @@ interface Fiangonana {
     MatDatepickerModule,
     MatInputModule,
     MatNativeDateModule,
+    MatExpansionModule,
     // BrowserAnimationsModule
   ],
   templateUrl: './offering.html',
@@ -74,9 +76,9 @@ export class Offering implements OnInit {
   }
 
   fetchFiangonanas(): void {
-    this.apiService.get<Fiangonana[]>('fiangonanas').subscribe({
+    this.apiService.get<HydraCollection<Fiangonana>>('fiangonanas').subscribe({
       next: (data) => {
-        this.fiangonanas = data;
+        this.fiangonanas = data['member'] || [];
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -103,9 +105,9 @@ export class Offering implements OnInit {
 
     const apiUrl = queryParams.length > 0 ? `offerings?${queryParams.join('&')}` : 'offerings';
 
-    this.apiService.get<Offerings[]>(apiUrl).subscribe({
+    this.apiService.get<HydraCollection<Offerings>>(apiUrl).subscribe({
       next: (data) => {
-        this.offerings = data;
+        this.offerings = data['member'] || [];
         this.error = null;
         this.cdr.detectChanges();
       },
