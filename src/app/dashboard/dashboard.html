@@ -1,8 +1,20 @@
+
 <mat-card>
-  <mat-card-header>
-    <mat-card-title>Bienvenue sur le Dashboard</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p>Ceci est la page principale du tableau de bord.</p>
-  </mat-card-content>
-</mat-card>
+      <mat-card-header>
+        <mat-card-title>Offerings Total by Fiangonana</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="isLoading" class="spinner-container">
+          <mat-spinner></mat-spinner>
+        </div>
+        <div *ngIf="!isLoading && chartData.datasets.length" class="chart-container">
+          <canvas baseChart
+                  [data]="chartData"
+                  [options]="chartOptions"
+                  type="bar"></canvas>
+        </div>
+        <div *ngIf="!isLoading && !chartData.datasets.length" class="no-data">
+          No data available
+        </div>
+      </mat-card-content>
+    </mat-card>
