@@ -8,6 +8,7 @@ import { ChartConfiguration, ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { of, catchError, finalize, map } from 'rxjs';
 import { ApiService } from '../http-client/api-service';
+import { ExpenseChart } from '../expense-chart/expense-chart';
 
 
 interface OfferingTotal {
@@ -23,9 +24,10 @@ interface OfferingTotal {
     MatCardModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    BaseChartDirective
+    BaseChartDirective,
+    ExpenseChart
   ],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
