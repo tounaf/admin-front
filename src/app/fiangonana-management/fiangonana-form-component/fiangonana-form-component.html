@@ -63,3 +63,14 @@
     </form>
   </mat-card-content>
 </mat-card>
+
+<div class="map-container" style="height: 400px;">
+  <div
+    leaflet
+    [leafletOptions]="options"
+    [leafletLayers]="layers"
+    [leafletLayersControl]="{ baseLayers: baseLayers, overlays: {} }"
+    (leafletMapReady)="onMapReady($event)">
+  </div>
+</div>
+

@@ -64,3 +64,13 @@
     </div>
   </mat-card-content>
 </mat-card>
+
+<div
+  leaflet
+  [leafletOptions]="options"
+  [leafletLayers]="layers"
+  [leafletLayersControl]="{ baseLayers: baseLayers, overlays: {} }"
+  (leafletMapReady)="onMapReady($event)"
+  style="height: 500px;">
+</div>
+

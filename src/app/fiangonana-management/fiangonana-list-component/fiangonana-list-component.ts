@@ -6,6 +6,8 @@ import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../http-client/api-service';
+import { LeafletModule } from '@bluehalo/ngx-leaflet';
+import * as L from 'leaflet';
 
 interface Fiangonana {
   id?: number;
@@ -32,7 +34,8 @@ interface HydraCollection<T> {
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    LeafletModule
   ],
   templateUrl: './fiangonana-list-component.html',
   styleUrls: ['./fiangonana-list-component.scss']
@@ -43,10 +46,56 @@ export class FiangonanaListComponent implements OnInit {
   displayedColumns: string[] = ['nom', 'adresse', 'latitude', 'longitude', 'createdAt', 'actions'];
   totalItems: number = 0;
 
+  map: L.Map | null = null;
+
+  baseLayers: { [name: string]: L.TileLayer } = {
+    'Plan (OSM)': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }),
+    'Satellite (Esri)': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri'
+    })
+  };
+
+
+  options: L.MapOptions = {
+    center: L.latLng(-18.8792, 47.5079),
+    zoom: 6,
+    layers: [ // Default layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      })
+    ]
+  };
+
+  layers: L.Layer[] = [];
+
   constructor(private cdr: ChangeDetectorRef, private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.fetchFiangonanas();
+  }
+
+  onMapReady(map: L.Map): void {
+    this.map = map;
+    this.refreshMapMarkers();
+  }
+
+  refreshMapMarkers(): void {
+    const markers = this.fiangonanas
+      .filter(f => f.latitude !== undefined && f.longitude !== undefined)
+      .map(f => {
+        const marker = L.marker([f.latitude!, f.longitude!])
+          .bindPopup(`<b>${f.nom}</b><br>${f.adresse ?? ''}`);
+        return marker;
+      });
+
+    this.layers = [...markers];
+
+    if (this.map && markers.length > 0) {
+      const group = L.featureGroup(markers);
+      this.map.fitBounds(group.getBounds(), { padding: [20, 20] });
+    }
   }
 
   fetchFiangonanas(): void {
@@ -55,6 +104,7 @@ export class FiangonanaListComponent implements OnInit {
       next: (response) => {
         this.fiangonanas = response['member'] || [];
         this.totalItems = response['totalItems'] ?? this.fiangonanas.length;
+        this.refreshMapMarkers();
         this.error = null;
         this.cdr.detectChanges();
       },
@@ -71,6 +121,7 @@ export class FiangonanaListComponent implements OnInit {
       this.apiService.delete(apiUrl).subscribe({
         next: () => {
           this.fiangonanas = this.fiangonanas.filter(f => f.id !== id);
+          this.refreshMapMarkers();
           this.cdr.detectChanges();
         },
         error: (err) => {

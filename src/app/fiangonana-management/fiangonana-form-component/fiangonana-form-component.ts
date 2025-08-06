@@ -7,6 +7,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../http-client/api-service';
+import { LeafletModule } from '@bluehalo/ngx-leaflet';
+
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface Fiangonana {
   id?: number;
@@ -28,7 +32,8 @@ interface Fiangonana {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    LeafletModule
   ],
   templateUrl: './fiangonana-form-component.html',
   styleUrls: ['./fiangonana-form-component.scss']
@@ -38,6 +43,29 @@ export class FiangonanaFormComponent implements OnInit {
   error: string | null = null;
   isEditMode = false;
   fiangonanaId: number | null = null;
+
+  baseLayers: { [name: string]: L.TileLayer } = {
+    'Plan (OSM)': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }),
+    'Satellite (Esri)': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri'
+    }),
+    'Plan Rue (OpenTopoMap)': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap (CC-BY-SA)'
+    })
+  };
+
+  options: L.MapOptions = {
+    center: L.latLng(-18.8792, 47.5079), // Exemple : Antananarivo
+    zoom: 6,
+    layers: [this.baseLayers['Plan (OSM)']] // couche par défaut
+  };
+
+  marker: L.Marker = L.marker([-18.8792, 47.5079], { draggable: true });
+
+  layers: L.Layer[] = [this.baseLayers['Plan (OSM)'], this.marker];
+  
 
   constructor(
     private fb: FormBuilder,
@@ -65,6 +93,25 @@ export class FiangonanaFormComponent implements OnInit {
     });
   }
 
+  onMapReady(map: L.Map): void {
+      // Synchroniser position marker avec formulaire
+      this.marker.on('dragend', () => {
+        const position = this.marker.getLatLng();
+        this.fiangonanaForm.patchValue({
+          latitude: position.lat,
+          longitude: position.lng
+        });
+      });
+
+      // Positionner le marker si latitude/longitude disponibles
+      const lat = this.fiangonanaForm.get('latitude')?.value;
+      const lng = this.fiangonanaForm.get('longitude')?.value;
+      if (lat !== null && lng !== null) {
+        this.marker.setLatLng([lat, lng]);
+        map.setView([lat, lng], 10);
+      }
+  }
+
   fetchFiangonana(id: number): void {
     const apiUrl = `fiangonanas/${id}`;
     this.apiService.get<Fiangonana>(apiUrl).subscribe({
@@ -76,6 +123,12 @@ export class FiangonanaFormComponent implements OnInit {
           latitude: data.latitude,
           longitude: data.longitude
         });
+
+        // Déplacer le marker sur la carte si données présentes
+        if (this.marker && data.latitude !== undefined && data.longitude !== undefined) {
+          this.marker.setLatLng([data.latitude, data.longitude]);
+          // Optionnel: recentrer la carte ici si nécessaire
+        }
       },
       error: (err) => {
         this.error = 'Erreur lors de la récupération des données: ' + err.message;
@@ -103,7 +156,7 @@ export class FiangonanaFormComponent implements OnInit {
       : 'fiangonanas';
 
     const request = this.isEditMode
-      ? this.apiService.patch<Fiangonana>(apiUrl, fiangonana)
+      ? this.apiService.put<Fiangonana>(apiUrl, fiangonana)
       : this.apiService.post<Fiangonana>(apiUrl, fiangonana);
 
     request.subscribe({

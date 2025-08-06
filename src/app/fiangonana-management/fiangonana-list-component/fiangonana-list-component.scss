@@ -43,3 +43,13 @@ button[mat-raised-button] {
   background-color: rgb(156, 24, 196);
   color: white;
 }
+
+.map-container {
+  height: 400px;
+  margin-bottom: 20px;
+
+  div[leaflet] {
+    height: 100%;
+    width: 100%;
+  }
+}

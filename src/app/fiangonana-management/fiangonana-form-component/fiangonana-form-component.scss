@@ -24,3 +24,13 @@ button[mat-raised-button] {
   background-color: rgb(156, 24, 196); /* vibrantPurple */
   color: white;
 }
+
+.map-container {
+  height: 300px;
+  margin-top: 20px;
+
+  div[leaflet] {
+    height: 100%;
+    width: 100%;
+  }
+}
