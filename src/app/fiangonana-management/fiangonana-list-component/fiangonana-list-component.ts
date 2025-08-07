@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../http-client/api-service';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import * as L from 'leaflet';
+import 'leaflet-control-geocoder';
+
 
 interface Fiangonana {
   id?: number;
@@ -76,9 +78,30 @@ export class FiangonanaListComponent implements OnInit {
     this.fetchFiangonanas();
   }
 
+  onGeocoder() {
+    if (!this.map) return;
+
+    // Ajouter le contrôle de géocodage
+    (L.Control as any).geocoder({
+      defaultMarkGeocode: true
+    })
+    .on('markgeocode', (e: any) => {
+    const bbox = e.geocode.bbox;
+    const poly = L.polygon([
+      bbox.getSouthEast(),
+      bbox.getNorthEast(),
+      bbox.getNorthWest(),
+      bbox.getSouthWest()
+    ]);
+    this.map!.fitBounds(poly.getBounds());
+    })
+    .addTo(this.map);
+  }
+
   onMapReady(map: L.Map): void {
     this.map = map;
     this.refreshMapMarkers();
+    this.onGeocoder();
   }
 
   refreshMapMarkers(): void {
@@ -87,6 +110,17 @@ export class FiangonanaListComponent implements OnInit {
       .map(f => {
         const marker = L.marker([f.latitude!, f.longitude!])
           .bindPopup(`<b>${f.nom}</b><br>${f.adresse ?? ''}`);
+        marker.options.icon = L.icon({
+            iconUrl: 'assets/leaflet/marker-icon.png',
+            iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            shadowUrl: 'assets/leaflet/marker-shadow.png',
+            shadowSize: [41, 41],
+            shadowAnchor: [12, 41],
+            popupAnchor: [12, 41],
+            tooltipAnchor: [16, -28],
+          });
         return marker;
       });
 

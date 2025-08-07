@@ -10,7 +10,8 @@ import { ApiService } from '../../http-client/api-service';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 
 import * as L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import 'leaflet-control-geocoder';
+
 
 interface Fiangonana {
   id?: number;
@@ -65,7 +66,7 @@ export class FiangonanaFormComponent implements OnInit {
   marker: L.Marker = L.marker([-18.8792, 47.5079], { draggable: true });
 
   layers: L.Layer[] = [this.baseLayers['Plan (OSM)'], this.marker];
-  
+  map: L.Map | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -83,6 +84,17 @@ export class FiangonanaFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.marker.options.icon = L.icon({
+      iconUrl: 'assets/leaflet/marker-icon.png',
+      iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      shadowUrl: 'assets/leaflet/marker-shadow.png',
+      shadowSize: [41, 41],
+      shadowAnchor: [12, 41],
+      popupAnchor: [12, 41],
+      tooltipAnchor: [16, -28],
+    });
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -93,8 +105,29 @@ export class FiangonanaFormComponent implements OnInit {
     });
   }
 
+  onGeocoder() {
+      if (!this.map) return;
+  
+      // Ajouter le contrôle de géocodage
+      (L.Control as any).geocoder({
+        defaultMarkGeocode: true
+      })
+      .on('markgeocode', (e: any) => {
+      const bbox = e.geocode.bbox;
+      const poly = L.polygon([
+        bbox.getSouthEast(),
+        bbox.getNorthEast(),
+        bbox.getNorthWest(),
+        bbox.getSouthWest()
+      ]);
+      this.map!.fitBounds(poly.getBounds());
+      })
+      .addTo(this.map);
+    }
+
   onMapReady(map: L.Map): void {
       // Synchroniser position marker avec formulaire
+      this.map = map;
       this.marker.on('dragend', () => {
         const position = this.marker.getLatLng();
         this.fiangonanaForm.patchValue({
@@ -110,6 +143,8 @@ export class FiangonanaFormComponent implements OnInit {
         this.marker.setLatLng([lat, lng]);
         map.setView([lat, lng], 10);
       }
+      this.marker.addTo(map);
+      this.onGeocoder();
   }
 
   fetchFiangonana(id: number): void {
