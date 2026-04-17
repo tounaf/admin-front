@@ -32,6 +32,9 @@
         <input matInput placeholder="Rechercher...">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
+      <button mat-icon-button (click)="toggleTheme()" matTooltip="Toggle Theme">
+        <mat-icon>{{ themeService.currentTheme === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+      </button>
       <button mat-icon-button (click)="logout()">
         <mat-icon>logout</mat-icon>
       </button>

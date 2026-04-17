@@ -8,9 +8,12 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { ThemeService } from './theme.service';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     RouterOutlet,
     CommonModule,
@@ -29,9 +32,14 @@ import { FormsModule } from '@angular/forms';
 })
 export class App {
   protected title = 'admin';
+  public themeService = inject(ThemeService);
 
   logout() {
     // Logique de déconnexion (ex. : supprimer le token, rediriger vers login)
     console.log('Déconnexion');
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 }
