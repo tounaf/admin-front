@@ -9,8 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule } from '@angular/forms';
 import { ThemeService } from './theme.service';
+import { LoadingService } from './loading.service';
 import { inject } from '@angular/core';
 import { fadeAnimation } from './animations';
 
@@ -31,6 +33,7 @@ import { fadeAnimation } from './animations';
     MatInputModule,
     MatFormFieldModule,
     MatTooltipModule,
+    MatProgressBarModule,
     FormsModule
   ],
   templateUrl: './app.html',
@@ -39,6 +42,7 @@ import { fadeAnimation } from './animations';
 export class App {
   protected title = 'admin';
   public themeService = inject(ThemeService);
+  public loadingService = inject(LoadingService);
 
   logout() {
     // Logique de déconnexion (ex. : supprimer le token, rediriger vers login)

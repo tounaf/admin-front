@@ -21,6 +21,7 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
+    <mat-progress-bar mode="indeterminate" *ngIf="loadingService.isLoading()" class="global-loader"></mat-progress-bar>
     <mat-toolbar color="primary">
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
