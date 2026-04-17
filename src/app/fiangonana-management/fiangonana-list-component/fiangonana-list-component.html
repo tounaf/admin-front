@@ -11,6 +11,7 @@
     <mat-card-actions>
       <button mat-raised-button color="primary" routerLink="/fiangonanas/create">Ajouter Fiangonana</button>
     </mat-card-actions>
+    <div class="custom-table-container">
     <table mat-table [dataSource]="fiangonanas" class="mat-elevation-z8" [@listAnimation]="fiangonanas.length">
       <ng-container matColumnDef="nom">
         <th mat-header-cell *matHeaderCellDef>Nom</th>
@@ -57,6 +58,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    </div>
 
     <div *ngIf="error" class="error">
       Erreur: {{ error }}

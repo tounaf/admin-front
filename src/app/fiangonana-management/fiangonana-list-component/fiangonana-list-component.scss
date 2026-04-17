@@ -8,8 +8,14 @@ mat-card {
   transition: background-color 0.3s, color 0.3s;
 }
 
+.custom-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
+  min-width: 800px;
   border-collapse: separate;
   border-spacing: 0;
   background-color: transparent !important;

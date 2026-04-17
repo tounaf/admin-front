@@ -45,6 +45,7 @@
     <mat-card-actions>
       <button mat-raised-button color="primary" routerLink="/fiangonanas/create">Mampiditra depense</button>
     </mat-card-actions>
+    <div class="custom-table-container">
     <table mat-table [dataSource]="expenses" class="mat-elevation-z8" [@listAnimation]="expenses.length">
       <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef>Vola nivoaka</th>
@@ -84,6 +85,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    </div>
 
     <div *ngIf="error" class="error">
       Erreur: {{ error }}

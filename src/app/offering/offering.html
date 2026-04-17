@@ -42,6 +42,7 @@
   </mat-card-header>
 
   <mat-card-content>
+    <div class="custom-table-container">
     <table mat-table [dataSource]="offerings" class="mat-elevation-z8 custom-table" [@listAnimation]="offerings.length">
       <!-- Type Column -->
       <ng-container matColumnDef="type">
@@ -105,6 +106,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    </div>
 
     <div *ngIf="error" class="error">
       ❌ {{ error }}

@@ -82,6 +82,10 @@ mat-toolbar {
   overflow: auto;
   background-color: var(--bg-color);
   transition: var(--transition-base);
+
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
 }
 
 mat-icon {

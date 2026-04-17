@@ -21,11 +21,25 @@ mat-card {
     display: flex;
     gap: 12px;
     justify-content: flex-end;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
   }
+}
+
+.custom-table-container {
+  width: 100%;
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
+  min-width: 600px;
   border-collapse: separate;
   border-spacing: 0;
   background-color: transparent !important;
