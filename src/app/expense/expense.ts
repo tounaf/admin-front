@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../http-client/api-service';
+import { cardAnimation, listAnimation } from '../animations';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
@@ -51,7 +52,8 @@ interface HydraCollection<T> {
     MatCardModule,
   ],
   templateUrl: './expense.html',
-  styleUrls: ['./expense.scss']
+  styleUrls: ['./expense.scss'],
+  animations: [cardAnimation, listAnimation]
 })
 export class Expense implements OnInit {
   expenses: Expenses[] = [];
