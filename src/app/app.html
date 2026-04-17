@@ -1,19 +1,22 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" opened class="sidenav">
+  <mat-sidenav #sidenav
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+    class="sidenav">
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active" (click)="closeSidenavOnMobile()">
         <mat-icon mat-list-icon>dashboard</mat-icon>
         Dashboard
       </a>
-      <a mat-list-item routerLink="fiangonanas" routerLinkActive="active">
+      <a mat-list-item routerLink="fiangonanas" routerLinkActive="active" (click)="closeSidenavOnMobile()">
         <mat-icon mat-list-icon>pageview</mat-icon>
         Fiangonana
       </a>
-      <a mat-list-item routerLink="finance" routerLinkActive="active">
+      <a mat-list-item routerLink="finance" routerLinkActive="active" (click)="closeSidenavOnMobile()">
         <mat-icon mat-list-icon>pages</mat-icon>
         Finance
       </a>
-      <a mat-list-item routerLink="expenses" routerLinkActive="active">
+      <a mat-list-item routerLink="expenses" routerLinkActive="active" (click)="closeSidenavOnMobile()">
         <mat-icon mat-list-icon>pages</mat-icon>
         Dépense
       </a>
@@ -21,23 +24,27 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
+    <mat-progress-bar mode="indeterminate" *ngIf="loadingService.isLoading()" class="global-loader"></mat-progress-bar>
     <mat-toolbar color="primary">
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
       <span>Admin Dashboard</span>
       <span class="spacer"></span>
-      <mat-form-field appearance="outline" class="search-bar">
+      <mat-form-field appearance="outline" class="search-bar" *ngIf="!(isHandset$ | async)">
         <mat-label>Recherche</mat-label>
         <input matInput placeholder="Rechercher...">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
+      <button mat-icon-button (click)="toggleTheme()" matTooltip="Toggle Theme">
+        <mat-icon>{{ themeService.currentTheme === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+      </button>
       <button mat-icon-button (click)="logout()">
         <mat-icon>logout</mat-icon>
       </button>
     </mat-toolbar>
-    <div class="content">
-      <router-outlet></router-outlet>
+    <div class="content" [@fadeAnimation]="o.isActivated ? o.activatedRoute : ''">
+      <router-outlet #o="outlet"></router-outlet>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

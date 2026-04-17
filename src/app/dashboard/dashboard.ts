@@ -9,6 +9,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { of, catchError, finalize, map } from 'rxjs';
 import { ApiService } from '../http-client/api-service';
 import { ExpenseChart } from '../expense-chart/expense-chart';
+import { cardAnimation } from '../animations';
 
 
 interface OfferingTotal {
@@ -28,6 +29,7 @@ interface OfferingTotal {
     ExpenseChart
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [cardAnimation],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })

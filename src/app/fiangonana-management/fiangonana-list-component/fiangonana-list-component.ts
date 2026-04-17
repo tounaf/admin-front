@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../http-client/api-service';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
+import { listAnimation, cardAnimation } from '../../animations';
 import * as L from 'leaflet';
 import 'leaflet-control-geocoder';
 
@@ -40,7 +41,8 @@ interface HydraCollection<T> {
     LeafletModule
   ],
   templateUrl: './fiangonana-list-component.html',
-  styleUrls: ['./fiangonana-list-component.scss']
+  styleUrls: ['./fiangonana-list-component.scss'],
+  animations: [listAnimation, cardAnimation]
 })
 export class FiangonanaListComponent implements OnInit {
   fiangonanas: Fiangonana[] = [];

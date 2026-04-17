@@ -13,7 +13,7 @@ import { MatNativeDateModule } from '@angular/material/core'
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ApiService } from '../http-client/api-service';
 import { HydraCollection } from '../type/hydra-collection';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { cardAnimation, listAnimation } from '../animations';
 
 interface Offerings {
   id: number;
@@ -48,6 +48,7 @@ interface Fiangonana {
   ],
   templateUrl: './offering.html',
   styleUrl: './offering.scss',
+  animations: [cardAnimation, listAnimation]
 })
 export class Offering implements OnInit {
   offerings: Offerings[] = [];

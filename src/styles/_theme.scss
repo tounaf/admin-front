@@ -1,0 +1,76 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$admin-primary: mat.m2-define-palette(mat.$m2-indigo-palette, 600, 400, 800);
+$admin-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
+$admin-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$admin-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $admin-primary,
+    accent: $admin-accent,
+    warn: $admin-warn,
+  ),
+  typography: mat.m2-define-typography-config(),
+  density: 0,
+));
+
+$admin-dark-theme: mat.m2-define-dark-theme((
+  color: (
+    primary: $admin-primary,
+    accent: $admin-accent,
+    warn: $admin-warn,
+  ),
+  typography: mat.m2-define-typography-config(),
+  density: 0,
+));
+
+:root {
+  --primary-color: #4f46e5;
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --accent-color: #ec4899;
+  --warn-color: #ef4444;
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-color: #1e293b;
+  --text-muted: #64748b;
+  --sidebar-bg: #ffffff;
+  --sidebar-active-bg: rgba(79, 70, 229, 0.1);
+  --sidebar-active-text: #4f46e5;
+  --toolbar-bg: #ffffff;
+  --toolbar-text: #1e293b;
+  --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --card-hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='dark'] {
+  --primary-color: #818cf8;
+  --primary-gradient: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+  --accent-color: #f472b6;
+  --warn-color: #f87171;
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --text-color: #f1f5f9;
+  --text-muted: #94a3b8;
+  --sidebar-bg: #1e293b;
+  --sidebar-active-bg: rgba(129, 140, 248, 0.2);
+  --sidebar-active-text: #818cf8;
+  --toolbar-bg: #1e293b;
+  --toolbar-text: #f1f5f9;
+  --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --card-hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+
+  @include mat.all-component-colors($admin-dark-theme);
+}
+
+@include mat.all-component-themes($admin-theme);
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: var(--transition-base);
+}
