@@ -2,9 +2,7 @@
 
 @include mat.core();
 
-// Define a theme configuration using Material 3 naming if available, or stay with m2 if needed.
-// Angular 20 might have moved things. Let's try the correct variable names.
-$admin-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$admin-primary: mat.m2-define-palette(mat.$m2-indigo-palette, 600, 400, 800);
 $admin-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
 $admin-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
@@ -29,31 +27,40 @@ $admin-dark-theme: mat.m2-define-dark-theme((
 ));
 
 :root {
-  --primary-color: #3f51b5;
-  --accent-color: #ff4081;
-  --warn-color: #f44336;
-  --bg-color: #f0f2f5;
+  --primary-color: #4f46e5;
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --accent-color: #ec4899;
+  --warn-color: #ef4444;
+  --bg-color: #f8fafc;
   --card-bg: #ffffff;
-  --text-color: rgba(0, 0, 0, 0.87);
+  --text-color: #1e293b;
+  --text-muted: #64748b;
   --sidebar-bg: #ffffff;
-  --sidebar-active-bg: #3f51b5;
-  --sidebar-active-text: #ffffff;
-  --toolbar-bg: #3f51b5;
-  --toolbar-text: #ffffff;
+  --sidebar-active-bg: rgba(79, 70, 229, 0.1);
+  --sidebar-active-text: #4f46e5;
+  --toolbar-bg: #ffffff;
+  --toolbar-text: #1e293b;
+  --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --card-hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme='dark'] {
-  --primary-color: #7986cb;
-  --accent-color: #ff80ab;
-  --warn-color: #f44336;
-  --bg-color: #121212;
-  --card-bg: #1e1e1e;
-  --text-color: rgba(255, 255, 255, 0.87);
-  --sidebar-bg: #1e1e1e;
-  --sidebar-active-bg: #7986cb;
-  --sidebar-active-text: #ffffff;
-  --toolbar-bg: #272727;
-  --toolbar-text: #ffffff;
+  --primary-color: #818cf8;
+  --primary-gradient: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+  --accent-color: #f472b6;
+  --warn-color: #f87171;
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --text-color: #f1f5f9;
+  --text-muted: #94a3b8;
+  --sidebar-bg: #1e293b;
+  --sidebar-active-bg: rgba(129, 140, 248, 0.2);
+  --sidebar-active-text: #818cf8;
+  --toolbar-bg: #1e293b;
+  --toolbar-text: #f1f5f9;
+  --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --card-hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5);
 
   @include mat.all-component-colors($admin-dark-theme);
 }
@@ -65,5 +72,5 @@ html, body {
   margin: 0;
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.3s, color 0.3s;
+  transition: var(--transition-base);
 }

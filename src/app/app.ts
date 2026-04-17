@@ -7,12 +7,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { ThemeService } from './theme.service';
 import { inject } from '@angular/core';
+import { fadeAnimation } from './animations';
 
 @Component({
   selector: 'app-root',
+  animations: [fadeAnimation],
   standalone: true,
   imports: [
     RouterOutlet,
@@ -25,6 +29,8 @@ import { inject } from '@angular/core';
     MatListModule,
     MatButtonModule,
     MatInputModule,
+    MatFormFieldModule,
+    MatTooltipModule,
     FormsModule
   ],
   templateUrl: './app.html',

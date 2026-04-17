@@ -3,25 +3,37 @@
 }
 
 .sidenav {
-  width: 250px;
+  width: 260px;
   background-color: var(--sidebar-bg);
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
-  transition: background-color 0.3s;
+  border-right: none;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.02);
+  transition: var(--transition-base);
 }
 
 .sidenav .mat-nav-list .mat-list-item {
   color: var(--text-color);
-  margin: 4px 8px;
-  border-radius: 8px;
+  margin: 8px 12px;
+  border-radius: 12px;
   width: auto;
+  transition: var(--transition-base);
+
+  &:hover {
+    background-color: var(--sidebar-active-bg);
+    transform: translateX(4px);
+  }
 }
 
 .sidenav .mat-nav-list .mat-list-item.active {
-  background-color: var(--sidebar-active-bg);
-  color: var(--sidebar-active-text);
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 
   mat-icon {
-    color: var(--sidebar-active-text);
+    color: white;
+  }
+
+  &:hover {
+    transform: none;
   }
 }
 
@@ -30,9 +42,10 @@ mat-toolbar {
   align-items: center;
   background-color: var(--toolbar-bg) !important;
   color: var(--toolbar-text) !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   z-index: 2;
-  transition: background-color 0.3s, color 0.3s;
+  transition: var(--transition-base);
+  padding: 0 24px;
 }
 
 .spacer {
@@ -40,9 +53,14 @@ mat-toolbar {
 }
 
 .search-bar {
-  width: 200px;
+  width: 240px;
   margin-right: 16px;
   font-size: 14px;
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: var(--bg-color) !important;
+    border-radius: 12px !important;
+  }
 
   ::ng-deep .mat-mdc-form-field-subscript-wrapper {
     display: none;
@@ -50,13 +68,21 @@ mat-toolbar {
 }
 
 .content {
-  padding: 24px;
+  padding: 32px;
   height: calc(100vh - 64px);
   overflow: auto;
   background-color: var(--bg-color);
-  transition: background-color 0.3s;
+  transition: var(--transition-base);
 }
 
 mat-icon {
-  margin-right: 8px;
+  margin-right: 12px;
+}
+
+button[mat-icon-button] {
+  transition: var(--transition-base);
+  &:hover {
+    transform: scale(1.1);
+    background-color: rgba(0,0,0,0.05);
+  }
 }

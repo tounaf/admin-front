@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card @cardAnimation>
   <mat-card-header>
     <mat-card-title>
       <span>📋 Liste des Fiangonanas</span>
@@ -55,7 +55,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [@listAnimation]></tr>
     </table>
 
     <div *ngIf="error" class="error">
