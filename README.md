@@ -1,59 +1,35 @@
-# Admin
+# École Management Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.3.
+Une application complète de gestion scolaire construite avec **Symfony 7** et **React**.
 
-## Development server
+## Fonctionnalités
 
-To start a local development server, run:
+- **Gestion des élèves** : Fiches détaillées, inscription.
+- **Suivi des écolages** : Suivi des paiements, filtrage par mois et par statut (payé/impayé).
+- **Communication** : Publication d'actualités, programmes et événements pour les parents.
+- **Comptabilité** : Gestion des mouvements d'entrée (écolages, inscriptions) et de sortie (salaires, matériel, travaux).
+- **Interface Moderne** : Design épuré avec Tailwind CSS, responsive et personnalisable.
 
-```bash
-ng serve
-```
+## Installation
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Cloner le repository
+2. Installer les dépendances PHP : `composer install`
+3. Installer les dépendances JS : `npm install`
+4. Configurer la base de données dans `.env` (SQLite par défaut)
+5. Lancer les migrations : `php bin/console doctrine:migrations:migrate`
+6. Compiler les assets : `npm run build` ou `npm run watch`
 
-## Code scaffolding
+## Architecture
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Backend** : Symfony API Platform pour une API REST robuste et auto-documentée.
+- **Frontend** : React avec React Router pour une expérience SPA fluide.
+- **Style** : Tailwind CSS pour un design moderne et facilement personnalisable via `assets/utils/config.js` et CSS variables.
+- **Base de données** : SQLite (configurable vers MySQL/PostgreSQL).
 
-```bash
-ng generate component component-name
-```
+## Personnalisation
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Le fichier `assets/utils/config.js` permet de modifier facilement :
+- Le nom de l'école
+- Les couleurs du thème
+- Le logo
+- Les catégories de dépenses et d'actualités

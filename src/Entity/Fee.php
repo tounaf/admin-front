@@ -1,0 +1,135 @@
+<?php
+
+namespace App\Entity;
+
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use App\Repository\FeeRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: FeeRepository::class)]
+#[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['student.id' => 'exact', 'month' => 'exact', 'year' => 'exact'])]
+#[ApiFilter(BooleanFilter::class, properties: ['isPaid'])]
+class Fee
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'fees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Student $student = null;
+
+    #[ORM\Column]
+    private ?float $amount = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $month = null;
+
+    #[ORM\Column]
+    private ?int $year = null;
+
+    #[ORM\Column]
+    private ?bool $isPaid = false;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $paymentDate = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $type = 'ecolage'; // ecolage, inscription, reinscription
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getStudent(): ?Student
+    {
+        return $this->student;
+    }
+
+    public function setStudent(?Student $student): static
+    {
+        $this->student = $student;
+
+        return $this;
+    }
+
+    public function getAmount(): ?float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(float $amount): static
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getMonth(): ?string
+    {
+        return $this->month;
+    }
+
+    public function setMonth(string $month): static
+    {
+        $this->month = $month;
+
+        return $this;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function setYear(int $year): static
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function isPaid(): ?bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): static
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    public function getPaymentDate(): ?\DateTimeInterface
+    {
+        return $this->paymentDate;
+    }
+
+    public function setPaymentDate(?\DateTimeInterface $paymentDate): static
+    {
+        $this->paymentDate = $paymentDate;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+}
