@@ -27,7 +27,7 @@
     "dependencies": {
         "@headlessui/react": "^2.2.10",
         "@tanstack/react-table": "^8.21.3",
-        "axios": "^1.15.0",
+        "axios": "^1.15.1",
         "clsx": "^2.1.1",
         "date-fns": "^4.1.0",
         "lucide-react": "^1.8.0",

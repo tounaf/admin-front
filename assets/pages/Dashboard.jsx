@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { StudentService, FeeService, AccountingService, NewsService } from '../utils/api';
+import { config } from '../utils/config';
 import {
   Users,
-  CreditCard,
   TrendingUp,
   TrendingDown,
   AlertCircle
@@ -29,31 +30,55 @@ const StatCard = ({ title, value, icon: Icon, color, trend }) => (
 );
 
 const Dashboard = () => {
+  const [stats, setStats] = useState({
+    students: 0,
+    entries: 0,
+    exits: 0,
+    unpaid: 0
+  });
+  const [recentFees, setRecentFees] = useState([]);
+  const [recentNews, setRecentNews] = useState([]);
+
+  useEffect(() => {
+    // In a real app we would have a dedicated stats endpoint
+    StudentService.getAll().then(res => setStats(s => ({...s, students: res.data['hydra:totalItems']})));
+    AccountingService.getAll().then(res => {
+        const movs = res.data['hydra:member'] || [];
+        const entries = movs.filter(m => m.type === 'entry').reduce((acc, curr) => acc + curr.amount, 0);
+        const exits = movs.filter(m => m.type === 'exit').reduce((acc, curr) => acc + curr.amount, 0);
+        setStats(s => ({...s, entries, exits}));
+    });
+    FeeService.getAll({ isPaid: false }).then(res => setStats(s => ({...s, unpaid: res.data['hydra:totalItems']})));
+
+    FeeService.getAll({ isPaid: true }).then(res => setRecentFees(res.data['hydra:member']?.slice(0, 4) || []));
+    NewsService.getAll().then(res => setRecentNews(res.data['hydra:member']?.slice(0, 3) || []));
+  }, []);
+
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Total Élèves"
-          value="248"
+          value={stats.students}
           icon={Users}
           color="bg-blue-500"
-          trend="+4%"
+          trend="+0%"
         />
         <StatCard
-          title="Recettes (Mois)"
-          value="12,500 €"
+          title="Recettes"
+          value={`${stats.entries.toLocaleString()} ${config.currency}`}
           icon={TrendingUp}
           color="bg-green-500"
         />
         <StatCard
-          title="Dépenses (Mois)"
-          value="8,200 €"
+          title="Dépenses"
+          value={`${stats.exits.toLocaleString()} ${config.currency}`}
           icon={TrendingDown}
           color="bg-red-500"
         />
         <StatCard
           title="Écolages Impayés"
-          value="15"
+          value={stats.unpaid}
           icon={AlertCircle}
           color="bg-orange-500"
         />
@@ -61,38 +86,42 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold mb-4">Derniers Écolages</h3>
+          <h3 className="text-lg font-bold mb-4">Derniers Écolages Payés</h3>
           <div className="space-y-4">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
+            {recentFees.map((fee) => (
+              <div key={fee.id} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600">
-                    JD
+                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600 uppercase">
+                    {fee.student?.firstName[0]}{fee.student?.lastName[0]}
                   </div>
                   <div>
-                    <p className="font-semibold">Jean Dupont</p>
-                    <p className="text-xs text-gray-500">Avril 2024</p>
+                    <p className="font-semibold">{fee.student?.firstName} {fee.student?.lastName}</p>
+                    <p className="text-xs text-gray-500">{fee.month} {fee.year}</p>
                   </div>
                 </div>
-                <span className="font-bold text-green-600">+150 €</span>
+                <span className="font-bold text-green-600">+{fee.amount.toLocaleString()} {config.currency}</span>
               </div>
             ))}
+            {recentFees.length === 0 && <p className="text-gray-500 italic text-sm">Aucun paiement récent.</p>}
           </div>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
           <h3 className="text-lg font-bold mb-4">Actualités Récentes</h3>
           <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="flex gap-4">
-                <div className="w-20 h-20 bg-gray-200 rounded-lg shrink-0"></div>
+            {recentNews.map((item) => (
+              <div key={item.id} className="flex gap-4">
+                <div className="w-20 h-20 bg-gray-200 rounded-lg shrink-0 overflow-hidden">
+                    {item.image && <img src={item.image} className="w-full h-full object-cover" />}
+                </div>
                 <div>
-                  <span className="text-xs font-bold text-blue-600 uppercase">Événement</span>
-                  <h4 className="font-bold mt-1">Excursion de fin d'année</h4>
-                  <p className="text-sm text-gray-500 line-clamp-2">Les détails concernant la sortie à la ferme pédagogique...</p>
+                  <span className="text-xs font-bold text-blue-600 uppercase">{item.category}</span>
+                  <h4 className="font-bold mt-1">{item.title}</h4>
+                  <p className="text-sm text-gray-500 line-clamp-2">{item.content}</p>
                 </div>
               </div>
             ))}
+            {recentNews.length === 0 && <p className="text-gray-500 italic text-sm">Aucune actualité récente.</p>}
           </div>
         </div>
       </div>

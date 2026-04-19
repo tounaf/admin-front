@@ -10,9 +10,13 @@ use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use App\Repository\FeeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FeeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['fee:read']],
+    denormalizationContext: ['groups' => ['fee:write']]
+)]
 #[ApiFilter(SearchFilter::class, properties: ['student.id' => 'exact', 'month' => 'exact', 'year' => 'exact'])]
 #[ApiFilter(BooleanFilter::class, properties: ['isPaid'])]
 class Fee
@@ -20,28 +24,36 @@ class Fee
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fee:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'fees')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['fee:read', 'fee:write'])]
     private ?Student $student = null;
 
     #[ORM\Column]
+    #[Groups(['fee:read', 'fee:write'])]
     private ?float $amount = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['fee:read', 'fee:write'])]
     private ?string $month = null;
 
     #[ORM\Column]
+    #[Groups(['fee:read', 'fee:write'])]
     private ?int $year = null;
 
     #[ORM\Column]
+    #[Groups(['fee:read', 'fee:write'])]
     private ?bool $isPaid = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['fee:read', 'fee:write'])]
     private ?\DateTimeInterface $paymentDate = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['fee:read', 'fee:write'])]
     private ?string $type = 'ecolage'; // ecolage, inscription, reinscription
 
     public function getId(): ?int

@@ -6,7 +6,7 @@ export const config = {
     secondary: "#64748b", // Slate 500
     accent: "#f59e0b", // Amber 500
   },
-  currency: "€",
+  currency: "Ar",
   navigation: [
     { name: 'Tableau de bord', path: '/' },
     { name: 'Élèves', path: '/students' },

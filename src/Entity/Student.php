@@ -8,38 +8,51 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['student:read']],
+    denormalizationContext: ['groups' => ['student:write']]
+)]
 class Student
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['student:read', 'fee:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['student:read', 'student:write', 'fee:read'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['student:read', 'student:write', 'fee:read'])]
     private ?string $lastName = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['student:read', 'student:write'])]
     private ?\DateTimeInterface $birthDate = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups(['student:read', 'student:write'])]
     private ?string $gender = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['student:read', 'student:write'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Groups(['student:read', 'student:write'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['student:read', 'student:write'])]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['student:read'])]
     private ?\DateTimeInterface $registrationDate = null;
 
     /**

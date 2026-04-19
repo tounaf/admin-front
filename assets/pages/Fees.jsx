@@ -1,17 +1,38 @@
-import React, { useState } from 'react';
-import { Search, Filter, CheckCircle, XCircle, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { FeeService, StudentService } from '../utils/api';
+import { config } from '../utils/config';
+import { Search, CheckCircle, Clock } from 'lucide-react';
 
 const Fees = () => {
   const [filter, setFilter] = useState('unpaid');
   const [selectedMonth, setSelectedMonth] = useState('Avril');
+  const [fees, setFees] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const fees = [
-    { id: 1, student: 'Jean Dupont', amount: 150, month: 'Avril', year: 2024, status: 'paid', date: '2024-04-05' },
-    { id: 2, student: 'Marie Curie', amount: 150, month: 'Avril', year: 2024, status: 'unpaid', date: '-' },
-    { id: 3, student: 'Paul Martin', amount: 150, month: 'Avril', year: 2024, status: 'unpaid', date: '-' },
-  ];
+  const loadFees = () => {
+    setLoading(true);
+    const params = { month: selectedMonth };
+    if (filter !== 'all') {
+        params.isPaid = filter === 'paid';
+    }
+    FeeService.getAll(params)
+      .then(res => {
+        setFees(res.data['hydra:member'] || []);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+  };
 
-  const filteredFees = filter === 'all' ? fees : fees.filter(f => f.status === filter);
+  useEffect(() => {
+    loadFees();
+  }, [filter, selectedMonth]);
+
+  const handleMarkAsPaid = (id) => {
+    FeeService.markAsPaid(id).then(() => loadFees());
+  };
 
   return (
     <div className="space-y-6">
@@ -49,9 +70,9 @@ const Fees = () => {
             onChange={(e) => setSelectedMonth(e.target.value)}
             className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option>Mars</option>
-            <option>Avril</option>
-            <option>Mai</option>
+            {['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'].map(m => (
+                <option key={m} value={m}>{m}</option>
+            ))}
           </select>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -72,28 +93,31 @@ const Fees = () => {
               <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase">Montant</th>
               <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase">Période</th>
               <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase">Statut</th>
-              <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase">Date Paiement</th>
               <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase text-right">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
-            {filteredFees.map((fee) => (
+            {fees.map((fee) => (
               <tr key={fee.id}>
-                <td className="px-6 py-4 font-semibold text-gray-800">{fee.student}</td>
-                <td className="px-6 py-4 font-bold text-gray-900">{fee.amount} €</td>
+                <td className="px-6 py-4 font-semibold text-gray-800">
+                    {fee.student ? `${fee.student.firstName} ${fee.student.lastName}` : 'N/A'}
+                </td>
+                <td className="px-6 py-4 font-bold text-gray-900">{fee.amount.toLocaleString()} {config.currency}</td>
                 <td className="px-6 py-4 text-gray-600">{fee.month} {fee.year}</td>
                 <td className="px-6 py-4">
                   <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold w-fit ${
-                    fee.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                    fee.isPaid ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
                   }`}>
-                    {fee.status === 'paid' ? <CheckCircle size={14} /> : <Clock size={14} />}
-                    {fee.status === 'paid' ? 'Payé' : 'En attente'}
+                    {fee.isPaid ? <CheckCircle size={14} /> : <Clock size={14} />}
+                    {fee.isPaid ? 'Payé' : 'En attente'}
                   </div>
                 </td>
-                <td className="px-6 py-4 text-gray-500 text-sm">{fee.date}</td>
                 <td className="px-6 py-4 text-right">
-                  {fee.status === 'unpaid' && (
-                    <button className="text-blue-600 font-bold text-sm hover:underline">
+                  {!fee.isPaid && (
+                    <button
+                        onClick={() => handleMarkAsPaid(fee.id)}
+                        className="text-blue-600 font-bold text-sm hover:underline"
+                    >
                       Marquer comme payé
                     </button>
                   )}
@@ -102,7 +126,7 @@ const Fees = () => {
             ))}
           </tbody>
         </table>
-        {filteredFees.length === 0 && (
+        {fees.length === 0 && !loading && (
           <div className="p-12 text-center text-gray-500">
             Aucun résultat pour ces critères.
           </div>

@@ -24,6 +24,7 @@ export const FeeService = {
 
 export const NewsService = {
   getAll: () => api.get('/news'),
+  create: (data) => api.post('/news', data),
 };
 
 export const AccountingService = {

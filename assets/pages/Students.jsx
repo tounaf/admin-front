@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { StudentService } from '../utils/api';
-import { Search, Plus, Edit2, Trash2 } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, User, Mail, Phone, Calendar as CalendarIcon, MapPin } from 'lucide-react';
+import Modal from '../components/Modal';
 
 const Students = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
-  useEffect(() => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    birthDate: '',
+    gender: 'M',
+    address: '',
+    phoneNumber: '',
+    email: ''
+  });
+
+  const loadStudents = () => {
+    setLoading(true);
     StudentService.getAll()
       .then(res => {
         setStudents(res.data['hydra:member'] || []);
@@ -14,16 +29,31 @@ const Students = () => {
       })
       .catch(err => {
         console.error(err);
-        // Fallback to mock data for demo if API fails/is empty
-        setStudents([
-          { id: 1, firstName: 'Jean', lastName: 'Dupont', birthDate: '2015-05-12', gender: 'M', registrationDate: '2023-09-01' },
-          { id: 2, firstName: 'Marie', lastName: 'Curie', birthDate: '2016-11-20', gender: 'F', registrationDate: '2023-09-02' },
-        ]);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadStudents();
   }, []);
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Chargement...</div>;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    StudentService.create(formData)
+      .then(() => {
+        setIsModalOpen(false);
+        setFormData({ firstName: '', lastName: '', birthDate: '', gender: 'M', address: '', phoneNumber: '', email: '' });
+        loadStudents();
+      })
+      .catch(err => console.error(err));
+  };
+
+  const openDetail = (student) => {
+    setSelectedStudent(student);
+    setIsDetailOpen(true);
+  };
+
+  if (loading && students.length === 0) return <div className="p-8 text-center text-gray-500">Chargement...</div>;
 
   return (
     <div className="space-y-6">
@@ -36,7 +66,10 @@ const Students = () => {
             className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
-        <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+        >
           <Plus size={20} />
           Ajouter un élève
         </button>
@@ -55,10 +88,14 @@ const Students = () => {
           </thead>
           <tbody className="divide-y divide-gray-50">
             {students.map((student) => (
-              <tr key={student.id} className="hover:bg-gray-50/50 transition-colors">
+              <tr
+                key={student.id}
+                className="hover:bg-gray-50/50 transition-colors cursor-pointer"
+                onClick={() => openDetail(student)}
+              >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 uppercase">
                       {student.firstName[0]}{student.lastName[0]}
                     </div>
                     <div>
@@ -76,7 +113,7 @@ const Students = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-gray-600 font-medium">{new Date(student.registrationDate).toLocaleDateString()}</td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center gap-2">
                     <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors">
                       <Edit2 size={18} />
@@ -90,7 +127,151 @@ const Students = () => {
             ))}
           </tbody>
         </table>
+        {students.length === 0 && !loading && (
+            <div className="p-12 text-center text-gray-500 italic">Aucun élève trouvé.</div>
+        )}
       </div>
+
+      {/* Modal Ajouter Élève */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Ajouter un nouvel élève">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+              <input
+                required
+                type="text"
+                value={formData.firstName}
+                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+              <input
+                required
+                type="text"
+                value={formData.lastName}
+                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Date de naissance</label>
+            <input
+              required
+              type="date"
+              value={formData.birthDate}
+              onChange={(e) => setFormData({...formData, birthDate: e.target.value})}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Sexe</label>
+            <select
+              value={formData.gender}
+              onChange={(e) => setFormData({...formData, gender: e.target.value})}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              <option value="M">Masculin</option>
+              <option value="F">Féminin</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email (Parent)</label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+            <input
+              type="tel"
+              value={formData.phoneNumber}
+              onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+            <textarea
+              rows="3"
+              value={formData.address}
+              onChange={(e) => setFormData({...formData, address: e.target.value})}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            ></textarea>
+          </div>
+          <button type="submit" className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors">
+            Enregistrer l'élève
+          </button>
+        </form>
+      </Modal>
+
+      {/* Fiche Élève Detail */}
+      <Modal isOpen={isDetailOpen} onClose={() => setIsDetailOpen(false)} title="Fiche Élève">
+        {selectedStudent && (
+          <div className="space-y-6">
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center text-3xl font-bold text-white shadow-lg uppercase">
+                {selectedStudent.firstName[0]}{selectedStudent.lastName[0]}
+              </div>
+              <h4 className="text-2xl font-bold text-gray-800">{selectedStudent.firstName} {selectedStudent.lastName}</h4>
+              <p className="text-blue-600 font-medium">Inscrit le {new Date(selectedStudent.registrationDate).toLocaleDateString()}</p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 mt-4">
+              <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                <CalendarIcon className="text-gray-400" size={20} />
+                <div>
+                  <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Date de naissance</p>
+                  <p className="text-gray-800 font-medium">{new Date(selectedStudent.birthDate).toLocaleDateString()}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                <User className="text-gray-400" size={20} />
+                <div>
+                  <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Sexe</p>
+                  <p className="text-gray-800 font-medium">{selectedStudent.gender === 'M' ? 'Masculin' : 'Féminin'}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                <Mail className="text-gray-400" size={20} />
+                <div>
+                  <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Email Parent</p>
+                  <p className="text-gray-800 font-medium">{selectedStudent.email || 'Non renseigné'}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                <Phone className="text-gray-400" size={20} />
+                <div>
+                  <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Téléphone</p>
+                  <p className="text-gray-800 font-medium">{selectedStudent.phoneNumber || 'Non renseigné'}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                <MapPin className="text-gray-400 mt-1" size={20} />
+                <div>
+                  <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Adresse</p>
+                  <p className="text-gray-800 font-medium">{selectedStudent.address || 'Non renseignée'}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+                <button className="flex-1 py-3 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition-colors">
+                    Imprimer fiche
+                </button>
+                <button className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors">
+                    Historique Écolage
+                </button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };
