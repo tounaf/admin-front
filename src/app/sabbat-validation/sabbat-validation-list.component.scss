@@ -1,0 +1,65 @@
+.filter-field {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 15px;
+}
+
+.fiangonana-name {
+  color: #673ab7;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.fiangonana-badge {
+  background: #ede7f6;
+  color: #673ab7;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.versement-block {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+
+  &.no-data {
+    border: 1px dashed #f44336;
+    background-color: #fff5f5;
+    
+    .section-title { color: #d32f2f; }
+  }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+    display: block;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    margin-bottom: 5px;
+    
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+  }
+}
+
+.warning-text {
+  color: #d32f2f;
+  font-weight: 500;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

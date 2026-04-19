@@ -84,6 +84,12 @@ export class FiangonanaFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'admin/assets/leaflet/marker-icon-2x.png',
+      iconUrl: 'admin/assets/leaflet/marker-icon.png',
+      shadowUrl: 'admin/assets/leaflet/marker-shadow.png',
+    })
+    
     this.marker.options.icon = L.icon({
       iconUrl: 'assets/leaflet/marker-icon.png',
       iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',

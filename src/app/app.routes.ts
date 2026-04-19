@@ -4,6 +4,7 @@ import { Offering } from './offering/offering';
 import { FiangonanaListComponent } from './fiangonana-management/fiangonana-list-component/fiangonana-list-component';
 import { FiangonanaFormComponent } from './fiangonana-management/fiangonana-form-component/fiangonana-form-component';
 import { Expense } from './expense/expense';
+import { SabbatValidationListComponent } from './sabbat-validation/sabbat-validation-list.component';
 export const routes: Routes = [
      { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: Dashboard },
@@ -12,4 +13,5 @@ export const routes: Routes = [
   { path: 'fiangonanas/create', component: FiangonanaFormComponent },
   { path: 'fiangonanas/:id/edit', component: FiangonanaFormComponent },
   { path: 'expenses', component: Expense },
+  { path: 'validations', component: SabbatValidationListComponent },
 ];

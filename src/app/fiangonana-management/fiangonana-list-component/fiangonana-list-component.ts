@@ -86,14 +86,15 @@ export class FiangonanaListComponent implements OnInit {
       defaultMarkGeocode: true
     })
     .on('markgeocode', (e: any) => {
-    const bbox = e.geocode.bbox;
-    const poly = L.polygon([
-      bbox.getSouthEast(),
-      bbox.getNorthEast(),
-      bbox.getNorthWest(),
-      bbox.getSouthWest()
-    ]);
-    this.map!.fitBounds(poly.getBounds());
+      const bbox = e.geocode.bbox;
+      const poly = L.polygon([
+        bbox.getSouthEast(),
+        bbox.getNorthEast(),
+        bbox.getNorthWest(),
+        bbox.getSouthWest()
+      ]);
+      this.map!.fitBounds(poly.getBounds());
+      
     })
     .addTo(this.map);
   }

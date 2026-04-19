@@ -1,0 +1,91 @@
+<div class="container">
+  <mat-card class="header-card">
+    <mat-card-header>
+      <mat-card-title>Contrôle des Bordereaux & Versements</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Filtrer par Fiangonana</mat-label>
+        <mat-select (selectionChange)="onFilterChange($event.value)">
+          <mat-option [value]="null">Toutes les églises</mat-option>
+          <mat-option *ngFor="let f of fiangonanas" [value]="f.id">{{ f.nom }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="validation-grid">
+    <mat-card *ngFor="let validation of validations" class="sabbat-card">
+      <mat-card-header>
+        <div mat-card-avatar class="status-icon" [ngClass]="validation.status.toLowerCase()">
+          <mat-icon>{{ validation.status === 'VALIDATED' ? 'check_circle' : 'history' }}</mat-icon>
+        </div>
+        <mat-card-title class="fiangonana-name">{{ validation.fiangonana?.nom }}</mat-card-title>
+        <mat-card-subtitle>Sabbat du {{ validation.dateSabbat | date:'dd/MM/yyyy' }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="finance-summary">
+          <div class="summary-row">
+            <span>Reliquat précédent:</span>
+            <strong>{{ validation.ambimbolaTeoAloha | currency:'MGA':'':'1.0-0' }} Ar</strong>
+          </div>
+          <div class="summary-row text-success">
+            <span>Entrées Sabbat:</span>
+            <strong>+ {{ validation.volaMiditraAndroany | currency:'MGA':'':'1.0-0' }} Ar</strong>
+          </div>
+          <div class="summary-row text-danger">
+            <span>Dépenses locales:</span>
+            <strong>- {{ validation.volaNivoaka | currency:'MGA':'':'1.0-0' }} Ar</strong>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="summary-row total">
+            <span>Net à verser:</span>
+            <strong class="vibrant-purple">{{ validation.volaSisaEoAntanana | currency:'MGA':'':'1.0-0' }} Ar</strong>
+          </div>
+        </div>
+
+        <div class="versement-block" [class.no-data]="!validation.versement">
+          <h4 class="section-title">INFO VERSEMENT</h4>
+          
+          <div *ngIf="validation.versement; else noVersement">
+            <div class="info-item">
+              <mat-icon inline>{{ validation.versement.type === 'CASH' ? 'payments' : 'cell_tower' }}</mat-icon>
+              <span>Mode : <strong>{{ validation.versement.type }}</strong></span>
+            </div>
+            <div class="info-item">
+              <mat-icon inline>description</mat-icon>
+              <span>Réf/Porteur : <strong>{{ validation.versement.reference }}</strong></span>
+            </div>
+            <div class="info-item" *ngIf="validation.versement.frais > 0">
+              <mat-icon inline color="warn">money_off</mat-icon>
+              <span>Frais : <strong>{{ validation.versement.frais | currency:'MGA':'':'1.0-0' }} Ar</strong></span>
+            </div>
+          </div>
+
+          <ng-template #noVersement>
+            <p class="warning-text"><mat-icon inline>warning</mat-icon> Versement non renseigné</p>
+          </ng-template>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button color="accent" (click)="openBordereau(validation)">
+          <mat-icon>image</mat-icon> BORDEREAU
+        </button>
+        <ng-container *ngIf="validation.status === 'PENDING'">
+          <button mat-raised-button 
+                  color="primary" 
+                  type="button"
+                  [disabled]="!validation.versement"
+                  (click)="validate(validation)">
+            VALIDER & ARCHIVER
+          </button>
+        </ng-container>
+        <small *ngIf="!validation.versement" class="text-danger">
+        (En attente des infos de versement)
+        </small>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
