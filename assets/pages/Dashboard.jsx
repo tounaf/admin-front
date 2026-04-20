@@ -40,18 +40,18 @@ const Dashboard = () => {
   const [recentNews, setRecentNews] = useState([]);
 
   useEffect(() => {
-    // In a real app we would have a dedicated stats endpoint
-    StudentService.getAll().then(res => setStats(s => ({...s, students: res.data['hydra:totalItems']})));
-    AccountingService.getAll().then(res => {
-        const movs = res.data['hydra:member'] || [];
-        const entries = movs.filter(m => m.type === 'entry').reduce((acc, curr) => acc + curr.amount, 0);
-        const exits = movs.filter(m => m.type === 'exit').reduce((acc, curr) => acc + curr.amount, 0);
+    // We already handle Hydra format in api.js but we must be careful with totalItems
+    // For now let's just get the length of the member array if totalItems is not directly accessible
+    StudentService.getAll().then(data => setStats(s => ({...s, students: data?.length || 0})));
+    AccountingService.getAll().then(movs => {
+        const entries = (movs || []).filter(m => m.type === 'entry').reduce((acc, curr) => acc + curr.amount, 0);
+        const exits = (movs || []).filter(m => m.type === 'exit').reduce((acc, curr) => acc + curr.amount, 0);
         setStats(s => ({...s, entries, exits}));
     });
-    FeeService.getAll({ isPaid: false }).then(res => setStats(s => ({...s, unpaid: res.data['hydra:totalItems']})));
+    FeeService.getAll({ isPaid: false }).then(data => setStats(s => ({...s, unpaid: data?.length || 0})));
 
-    FeeService.getAll({ isPaid: true }).then(res => setRecentFees(res.data['hydra:member']?.slice(0, 4) || []));
-    NewsService.getAll().then(res => setRecentNews(res.data['hydra:member']?.slice(0, 3) || []));
+    FeeService.getAll({ isPaid: true }).then(data => setRecentFees(data?.slice(0, 4) || []));
+    NewsService.getAll().then(data => setRecentNews(data?.slice(0, 3) || []));
   }, []);
 
   return (
@@ -92,7 +92,7 @@ const Dashboard = () => {
               <div key={fee.id} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600 uppercase">
-                    {fee.student?.firstName[0]}{fee.student?.lastName[0]}
+                    {fee.student?.firstName?.[0]}{fee.student?.lastName?.[0]}
                   </div>
                   <div>
                     <p className="font-semibold">{fee.student?.firstName} {fee.student?.lastName}</p>

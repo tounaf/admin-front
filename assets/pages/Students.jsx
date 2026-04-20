@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StudentService } from '../utils/api';
-import { Search, Plus, Edit2, Trash2, User, Mail, Phone, Calendar as CalendarIcon, MapPin } from 'lucide-react';
+import { StudentService, ClasseService } from '../utils/api';
+import { Search, Plus, Edit2, Trash2, User, Mail, Phone, Calendar as CalendarIcon, MapPin, GraduationCap } from 'lucide-react';
 import Modal from '../components/Modal';
 
 const Students = () => {
   const [students, setStudents] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -17,33 +18,40 @@ const Students = () => {
     gender: 'M',
     address: '',
     phoneNumber: '',
-    email: ''
+    email: '',
+    classe: ''
   });
 
-  const loadStudents = () => {
+  const loadData = async () => {
     setLoading(true);
-    StudentService.getAll()
-      .then(res => {
-        setStudents(res.data['hydra:member'] || []);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
+    try {
+      const [studentsData, classesData] = await Promise.all([
+        StudentService.getAll(),
+        ClasseService.getAll()
+      ]);
+      setStudents(studentsData);
+      setClasses(classesData);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    loadStudents();
+    loadData();
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    StudentService.create(formData)
+    const data = { ...formData };
+    if (data.classe === '') delete data.classe;
+
+    StudentService.create(data)
       .then(() => {
         setIsModalOpen(false);
-        setFormData({ firstName: '', lastName: '', birthDate: '', gender: 'M', address: '', phoneNumber: '', email: '' });
-        loadStudents();
+        setFormData({ firstName: '', lastName: '', birthDate: '', gender: 'M', address: '', phoneNumber: '', email: '', classe: '' });
+        loadData();
       })
       .catch(err => console.error(err));
   };
@@ -80,9 +88,9 @@ const Students = () => {
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
               <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Élève</th>
+              <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Classe</th>
               <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Date de naissance</th>
               <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Sexe</th>
-              <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Inscrit le</th>
               <th className="px-6 py-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -104,6 +112,9 @@ const Students = () => {
                     </div>
                   </div>
                 </td>
+                <td className="px-6 py-4">
+                    <span className="text-gray-700 font-medium">{student.classe?.name || 'Non assigné'}</span>
+                </td>
                 <td className="px-6 py-4 text-gray-600 font-medium">{new Date(student.birthDate).toLocaleDateString()}</td>
                 <td className="px-6 py-4">
                   <span className={`px-2 py-1 rounded-full text-xs font-bold ${
@@ -112,7 +123,6 @@ const Students = () => {
                     {student.gender === 'M' ? 'Masculin' : 'Féminin'}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-gray-600 font-medium">{new Date(student.registrationDate).toLocaleDateString()}</td>
                 <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center gap-2">
                     <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors">
@@ -157,15 +167,30 @@ const Students = () => {
               />
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date de naissance</label>
-            <input
-              required
-              type="date"
-              value={formData.birthDate}
-              onChange={(e) => setFormData({...formData, birthDate: e.target.value})}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date de naissance</label>
+                <input
+                required
+                type="date"
+                value={formData.birthDate}
+                onChange={(e) => setFormData({...formData, birthDate: e.target.value})}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Classe</label>
+                <select
+                value={formData.classe}
+                onChange={(e) => setFormData({...formData, classe: e.target.value})}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                >
+                <option value="">Sélectionner une classe</option>
+                {classes.map(c => (
+                    <option key={c.id} value={`/api/classes/${c.id}`}>{c.name}</option>
+                ))}
+                </select>
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Sexe</label>
@@ -224,6 +249,13 @@ const Students = () => {
             </div>
 
             <div className="grid grid-cols-1 gap-4 mt-4">
+              <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                <GraduationCap className="text-gray-400" size={20} />
+                <div>
+                  <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Classe</p>
+                  <p className="text-gray-800 font-medium">{selectedStudent.classe?.name || 'Non assigné'}</p>
+                </div>
+              </div>
               <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
                 <CalendarIcon className="text-gray-400" size={20} />
                 <div>

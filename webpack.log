@@ -1,0 +1,32 @@
+
+> watch
+> encore dev --watch
+
+Running webpack ...
+
+ DONE  Compiled successfully in 6564ms6:27:25 AM
+
+5 files written to public/build
+Entrypoint app [big] 5.3 MiB = runtime.js 19.3 KiB vendors-node_modules_lucide-react_dist_esm_icons_calculator_js-node_modules_lucide-react_dist-c67145.js 4.93 MiB app.css 35.4 KiB app.js 328 KiB
+webpack compiled successfully
+ WAIT  Compiling...6:37:11 AM
+
+ DONE  Compiled successfully in 1403ms6:37:13 AM
+
+5 files written to public/build
+Entrypoint app [big] 5.3 MiB = runtime.js 19.3 KiB vendors-node_modules_lucide-react_dist_esm_icons_calculator_js-node_modules_lucide-react_dist-c67145.js 4.93 MiB app.css 35.4 KiB app.js 328 KiB
+webpack compiled successfully
+ WAIT  Compiling...6:38:47 AM
+
+ DONE  Compiled successfully in 520ms6:38:48 AM
+
+5 files written to public/build
+Entrypoint app [big] 5.3 MiB = runtime.js 19.3 KiB vendors-node_modules_lucide-react_dist_esm_icons_calculator_js-node_modules_lucide-react_dist-c67145.js 4.93 MiB app.css 35.4 KiB app.js 329 KiB
+webpack compiled successfully
+ WAIT  Compiling...6:40:34 AM
+
+ DONE  Compiled successfully in 617ms6:40:35 AM
+
+5 files written to public/build
+Entrypoint app [big] 5.3 MiB = runtime.js 19.3 KiB vendors-node_modules_lucide-react_dist_esm_icons_calculator_js-node_modules_lucide-react_dist-c67145.js 4.93 MiB app.css 35.4 KiB app.js 329 KiB
+webpack compiled successfully

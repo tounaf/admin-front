@@ -55,6 +55,10 @@ class Student
     #[Groups(['student:read'])]
     private ?\DateTimeInterface $registrationDate = null;
 
+    #[ORM\ManyToOne(inversedBy: 'students')]
+    #[Groups(['student:read', 'student:write'])]
+    private ?Classe $classe = null;
+
     /**
      * @var Collection<int, Fee>
      */
@@ -164,6 +168,18 @@ class Student
     public function setRegistrationDate(\DateTimeInterface $registrationDate): static
     {
         $this->registrationDate = $registrationDate;
+
+        return $this;
+    }
+
+    public function getClasse(): ?Classe
+    {
+        return $this->classe;
+    }
+
+    public function setClasse(?Classe $classe): static
+    {
+        $this->classe = $classe;
 
         return $this;
     }
