@@ -12,6 +12,19 @@
   --border-radius: 12px;
 }
 
+.global-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  height: 4px;
+
+  .mat-mdc-progress-bar {
+    height: 4px !important;
+  }
+}
+
 html, body {
   height: 100%;
 }

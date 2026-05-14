@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter, map } from 'rxjs';
@@ -8,7 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule } from '@angular/forms';
+import { LoadingService } from './http-client/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +25,7 @@ import { FormsModule } from '@angular/forms';
     MatListModule,
     MatButtonModule,
     MatInputModule,
+    MatProgressBarModule,
     FormsModule
   ],
   templateUrl: './app.html',
@@ -31,6 +34,7 @@ import { FormsModule } from '@angular/forms';
 export class App {
   protected title = 'admin';
   protected currentRouteTitle = 'Tableau de bord';
+  protected loading$ = inject(LoadingService).loading$;
 
   constructor(private router: Router) {
     this.router.events.pipe(

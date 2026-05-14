@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../http-client/api-service';
@@ -36,6 +37,7 @@ interface HydraCollection<T> {
     MatTableModule,
     MatButtonModule,
     MatCardModule,
+    MatTooltipModule,
     MatIconModule,
     RouterModule,
     LeafletModule
