@@ -1,59 +1,60 @@
-# Admin
+# Backoffice Administration - Gestion
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.3.
+Ce projet est une application de backoffice moderne développée avec **Angular 20**, conçue pour la gestion administrative et financière des établissements (Fiangonanas).
 
-## Development server
+## 🌍 Contexte
 
-To start a local development server, run:
+Le projet vise à fournir une interface d'administration robuste et intuitive pour :
+- Visualiser les performances financières via un tableau de bord.
+- Gérer les établissements (Fiangonana) et leur géolocalisation.
+- Suivre les offrandes et les dépenses.
+- Valider les activités hebdomadaires (Sabbat).
 
-```bash
-ng serve
-```
+L'application communique avec une API backend (Symfony/API Platform) pour la persistance des données.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🚀 Installation
 
-## Code scaffolding
+### Prérequis
+- Node.js (v20+)
+- npm
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Étapes
+1. Cloner le dépôt.
+2. Installer les dépendances :
+   ```bash
+   npm install
+   ```
 
-```bash
-ng generate component component-name
-```
+## 🛠 Mode Développement
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Pour lancer le serveur de développement local :
 
 ```bash
-ng test
+npm start
+# ou
+./node_modules/.bin/ng serve
 ```
 
-## Running end-to-end tests
+L'application est accessible sur `http://localhost:4200/admin`. Elle se recharge automatiquement lors de la modification des fichiers sources.
 
-For end-to-end (e2e) testing, run:
+## 🏗 Build (Production)
+
+Pour compiler le projet pour la production :
 
 ```bash
-ng e2e
+npm run build
+# ou
+./node_modules/.bin/ng build
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Les artefacts de build seront stockés dans le répertoire `dist/admin`. La configuration est optimisée pour la performance et le déploiement sur un sous-répertoire `/admin`.
 
-## Additional Resources
+## 📚 Documentation Détaillée
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Pour plus de détails sur les fonctionnalités et l'architecture technique, veuillez consulter le dossier `docs/` :
+- [Architecture & Core Features](docs/architecture.md)
+- [Dashboard](docs/dashboard.md)
+- [Gestion des Fiangonanas](docs/fiangonana.md)
+- [Gestion des Finances (Offrandes)](docs/finance-offering.md)
+- [Gestion des Dépenses](docs/expenses.md)
+- [Validations Sabbat](docs/validations.md)

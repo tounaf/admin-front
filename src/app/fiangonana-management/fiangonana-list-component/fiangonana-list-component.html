@@ -1,20 +1,28 @@
-<mat-card>
+<mat-card class="table-card">
   <mat-card-header>
     <mat-card-title>
-      <span>📋 Liste des Fiangonanas</span>
-      <span class="total"> Total : {{ totalItems }}</span>
-
+      <mat-icon>church</mat-icon> Liste des Fiangonanas
     </mat-card-title>
-  
+    <div class="header-actions">
+       <span class="count-badge">
+        {{ totalItems }} établissements
+      </span>
+      <button mat-flat-button color="primary" routerLink="/fiangonanas/create">
+        <mat-icon>add</mat-icon> Nouveau
+      </button>
+    </div>
   </mat-card-header>
+
   <mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" routerLink="/fiangonanas/create">Ajouter Fiangonana</button>
-    </mat-card-actions>
-    <table mat-table [dataSource]="fiangonanas" class="mat-elevation-z8">
+    <table mat-table [dataSource]="fiangonanas" class="custom-table">
       <ng-container matColumnDef="nom">
         <th mat-header-cell *matHeaderCellDef>Nom</th>
-        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.nom }}</td>
+        <td mat-cell *matCellDef="let fiangonana">
+          <div class="fiangonana-name">
+            <strong>{{ fiangonana.nom }}</strong>
+            <span class="sub-text">{{ fiangonana.code }}</span>
+          </div>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="code">
@@ -24,12 +32,19 @@
 
       <ng-container matColumnDef="caution">
         <th mat-header-cell *matHeaderCellDef>Caution</th>
-        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.caution !== undefined ? fiangonana.caution : '-' }}</td>
+        <td mat-cell *matCellDef="let fiangonana">
+          <span class="caution-val">{{ fiangonana.caution !== undefined ? fiangonana.caution : '-' }}</span>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="adresse">
         <th mat-header-cell *matHeaderCellDef>Adresse</th>
-        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.adresse || '-' }}</td>
+        <td mat-cell *matCellDef="let fiangonana">
+          <div class="address-cell">
+             <mat-icon>place</mat-icon>
+             <span>{{ fiangonana.adresse || '-' }}</span>
+          </div>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="latitude">
@@ -43,19 +58,21 @@
       </ng-container>
 
       <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef>Date de création</th>
-        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.createdAt | date:'short' }}</td>
+        <th mat-header-cell *matHeaderCellDef>Création</th>
+        <td mat-cell *matCellDef="let fiangonana">{{ fiangonana.createdAt | date:'dd/MM/yyyy' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let fiangonana">
-          <button mat-icon-button color="primary" [routerLink]="['/fiangonanas', fiangonana.id, 'edit']">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="deleteFiangonana(fiangonana.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <div class="action-buttons">
+            <button mat-icon-button class="edit-btn" [routerLink]="['/fiangonanas', fiangonana.id, 'edit']" matTooltip="Modifier">
+              <mat-icon>edit_note</mat-icon>
+            </button>
+            <button mat-icon-button class="delete-btn" (click)="deleteFiangonana(fiangonana.id)" matTooltip="Supprimer">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
         </td>
       </ng-container>
 
@@ -63,19 +80,26 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <div *ngIf="error" class="error">
-      Erreur: {{ error }}
-      <button mat-button color="primary" (click)="fetchFiangonanas()">Réessayer</button>
+    <div *ngIf="error" class="error-banner">
+      <mat-icon>warning</mat-icon>
+      <span>{{ error }}</span>
+      <button mat-button (click)="fetchFiangonanas()">Réessayer</button>
     </div>
   </mat-card-content>
 </mat-card>
 
-<div
-  leaflet
-  [leafletOptions]="options"
-  [leafletLayers]="layers"
-  [leafletLayersControl]="{ baseLayers: baseLayers, overlays: {} }"
-  (leafletMapReady)="onMapReady($event)"
-  style="height: 500px;">
-</div>
-
+<mat-card class="map-card">
+  <mat-card-header>
+    <mat-card-title><mat-icon>map</mat-icon> Géolocalisation</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div
+      leaflet
+      [leafletOptions]="options"
+      [leafletLayers]="layers"
+      [leafletLayersControl]="{ baseLayers: baseLayers, overlays: {} }"
+      (leafletMapReady)="onMapReady($event)"
+      class="map-container">
+    </div>
+  </mat-card-content>
+</mat-card>

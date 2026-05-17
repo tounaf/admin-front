@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit }
 import { MatCardModule } from '@angular/material/card';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ChartConfiguration, ChartData, ChartOptions } from 'chart.js';
@@ -22,6 +23,7 @@ interface OfferingTotal {
   imports: [    
     CommonModule,
     MatCardModule,
+    MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     BaseChartDirective,
@@ -50,9 +52,9 @@ export class Dashboard implements OnInit {
         labels: {
           font: {
             size: 14,
-            family: "'Roboto', sans-serif"
+            family: "'Poppins', sans-serif"
           },
-          color: '#333'
+          color: '#64748b'
         }
       },
       tooltip: {
@@ -69,28 +71,33 @@ export class Dashboard implements OnInit {
         title: {
           display: true,
           text: 'Date',
-          color: '#333',
+          color: '#64748b',
           font: {
-            size: 14,
-            family: "'Roboto', sans-serif"
+            size: 13,
+            family: "'Poppins', sans-serif",
+            weight: 600
           }
         },
         ticks: {
-          color: '#333'
+          color: '#94a3b8'
+        },
+        grid: {
+          display: false
         }
       },
       y: {
         title: {
           display: true,
           text: 'Total Offering (MGA)',
-          color: '#333',
+          color: '#64748b',
           font: {
-            size: 14,
-            family: "'Roboto', sans-serif"
+            size: 13,
+            family: "'Poppins', sans-serif",
+            weight: 600
           }
         },
         ticks: {
-          color: '#333',
+          color: '#94a3b8',
           callback: (value) => Number(value).toLocaleString('fr-MG', { minimumFractionDigits: 0 })
         }
       }

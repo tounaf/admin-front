@@ -1,46 +1,85 @@
-<mat-sidenav-container class="sidenav-container">
+<div class="global-loader" *ngIf="loading$ | async">
+  <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+</div>
+
+<mat-sidenav-container class="sidenav-container" autosize>
   <mat-sidenav #sidenav mode="side" opened class="sidenav">
+    <div class="sidebar-header">
+      <mat-icon class="logo-icon">account_balance</mat-icon>
+      <span class="logo-text">GESTION</span>
+    </div>
+
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
-        <mat-icon mat-list-icon>dashboard</mat-icon>
-        Dashboard
+      <div class="nav-section">PRINCIPAL</div>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" class="nav-item">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Tableau de bord</span>
       </a>
-      <a mat-list-item routerLink="fiangonanas" routerLinkActive="active">
-        <mat-icon mat-list-icon>pageview</mat-icon>
-        Fiangonana
+
+      <div class="nav-section">GESTION</div>
+      <a mat-list-item routerLink="fiangonanas" routerLinkActive="active-link" class="nav-item">
+        <mat-icon matListItemIcon>church</mat-icon>
+        <span matListItemTitle>Fiangonana</span>
       </a>
-      <a mat-list-item routerLink="finance" routerLinkActive="active">
-        <mat-icon mat-list-icon>pages</mat-icon>
-        Finance
+
+      <div class="nav-section">FINANCES</div>
+      <a mat-list-item routerLink="finance" routerLinkActive="active-link" class="nav-item">
+        <mat-icon matListItemIcon>payments</mat-icon>
+        <span matListItemTitle>Offrandes</span>
       </a>
-      <a mat-list-item routerLink="validations" routerLinkActive="active">
-        <mat-icon mat-list-icon>fact_check</mat-icon>
-        Validations Sabbat
+      <a mat-list-item routerLink="expenses" routerLinkActive="active-link" class="nav-item">
+        <mat-icon matListItemIcon>shopping_cart</mat-icon>
+        <span matListItemTitle>Dépenses</span>
       </a>
-      <a mat-list-item routerLink="expenses" routerLinkActive="active">
-        <mat-icon mat-list-icon>pages</mat-icon>
-        Dépense
+
+      <div class="nav-section">ADMINISTRATION</div>
+      <a mat-list-item routerLink="validations" routerLinkActive="active-link" class="nav-item">
+        <mat-icon matListItemIcon>verified</mat-icon>
+        <span matListItemTitle>Validations</span>
       </a>
     </mat-nav-list>
+
+    <div class="sidebar-footer">
+      <button mat-button class="logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Déconnexion
+      </button>
+    </div>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()">
-        <mat-icon>menu</mat-icon>
+    <mat-toolbar class="main-toolbar">
+      <button mat-icon-button (click)="sidenav.toggle()" class="menu-btn">
+        <mat-icon>menu_open</mat-icon>
       </button>
-      <span>Admin Dashboard</span>
+
+      <div class="breadcrumb">
+        <span class="muted">Pages</span> / <span>{{ currentRouteTitle }}</span>
+      </div>
+
       <span class="spacer"></span>
-      <mat-form-field appearance="outline" class="search-bar">
-        <mat-label>Recherche</mat-label>
-        <input matInput placeholder="Rechercher...">
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-      <button mat-icon-button (click)="logout()">
-        <mat-icon>logout</mat-icon>
-      </button>
+
+      <div class="toolbar-actions">
+        <div class="search-box">
+          <mat-icon>search</mat-icon>
+          <input type="text" placeholder="Rechercher...">
+        </div>
+
+        <button mat-icon-button>
+          <mat-icon>notifications</mat-icon>
+        </button>
+
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" alt="Avatar">
+        </div>
+      </div>
     </mat-toolbar>
+
     <div class="content">
+      <div class="content-header">
+        <h1>{{ currentRouteTitle }}</h1>
+        <p class="subtitle">Gérez vos activités en toute simplicité.</p>
+      </div>
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>

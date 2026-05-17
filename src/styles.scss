@@ -1,8 +1,96 @@
 /* You can add global styles to this file, and also import other style files */
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #10b981;
+  --bg-color: #f8fafc;
+  --sidebar-color: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --border-radius: 12px;
+}
+
+.global-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  height: 4px;
+
+  .mat-mdc-progress-bar {
+    height: 4px !important;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
 body {
+  margin: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: #f0f2f5;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+}
+
+// Material Overrides
+.mat-typography {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.mat-mdc-card {
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--card-shadow) !important;
+  border: 1px solid #e2e8f0 !important;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.mat-mdc-table {
+  background: white !important;
+  border-radius: var(--border-radius) !important;
+  overflow: hidden;
+}
+
+.mat-mdc-header-cell {
+  background-color: #f1f5f9 !important;
+  color: var(--text-muted) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em;
+}
+
+.mat-mdc-row:hover {
+  background-color: #f8fafc !important;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background-color: var(--primary-color) !important;
+  border-radius: 8px !important;
+}
+
+// Custom Utilities
+.chip {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.total-amount {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
 }

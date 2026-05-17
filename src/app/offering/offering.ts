@@ -5,6 +5,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
@@ -39,6 +41,8 @@ interface Fiangonana {
     MatSelectModule,
     MatFormFieldModule,
     MatButtonModule,
+    MatMenuModule,
+    MatIconModule,
     FormsModule,
     ReactiveFormsModule,
     MatDatepickerModule,

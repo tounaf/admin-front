@@ -1,55 +1,83 @@
-mat-card {
-  margin: 20px;
-  padding: 20px;
-  background-color: #ffffff;
+.table-card {
+  margin-bottom: 24px;
+
+  mat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid #f1f5f9;
+
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      mat-icon { color: var(--primary-color); }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+  }
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+.fiangonana-name {
+  display: flex;
+  flex-direction: column;
+
+  strong { color: var(--text-main); font-size: 0.95rem; }
+  .sub-text { font-size: 0.75rem; color: var(--text-muted); }
 }
 
-.mat-elevation-z8 {
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
-}
-
-th.mat-header-cell {
-  background-color: rgb(156, 24, 196); /* vibrantPurple */
-  color: white;
-  font-weight: bold;
-}
-
-td.mat-cell {
-  padding: 8px;
-}
-
-.error {
-  color: red;
-  margin-top: 10px;
-  font-size: 14px;
+.address-cell {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
 }
 
-mat-card-actions {
+.action-buttons {
   display: flex;
-  justify-content: flex-end;
+  gap: 4px;
+
+  .edit-btn { color: var(--primary-color); }
+  .delete-btn { color: #ef4444; }
 }
 
-button[mat-raised-button] {
-  background-color: rgb(156, 24, 196);
-  color: white;
+.map-card {
+  mat-card-header {
+    padding: 16px 24px;
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      mat-icon { color: var(--secondary-color); }
+    }
+  }
 }
 
 .map-container {
-  height: 400px;
-  margin-bottom: 20px;
+  height: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-  div[leaflet] {
-    height: 100%;
-    width: 100%;
-  }
+.error-banner {
+  background: #fef2f2;
+  color: #b91c1c;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
