@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://fva-vitaonyasany.mg/admin-api/public/index.php/api',
+  // Via le proxy Angular (proxy.conf.json) → http://127.0.0.1:8000/api
+  apiUrl: '/api',
 };
